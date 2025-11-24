@@ -2,6 +2,8 @@
 
 A comprehensive digital marketing AI agency platform that leverages MCP servers to create, manage, and optimize paid advertising campaigns with AI-generated content.
 
+**Production URL**: [smartads.agentprovision.com](https://smartads.agentprovision.com)
+
 ## Features
 
 ### 🎯 Core Capabilities
@@ -124,6 +126,56 @@ The MCP server provides tools for:
   }
 }
 ```
+
+}
+```
+
+## Testing
+
+### End-to-End Test Results
+
+**✅ Content Persistence**: All generated content is automatically saved to `backend/public/generated/`
+
+**Test Results** (2025-11-24):
+
+1. **Copy Generation** ✅
+   - Status: Working perfectly
+   - Files saved: `copy-{timestamp}.json`
+   - Location: `backend/public/generated/`
+   - Verification: Multiple test files created successfully
+
+2. **Image Generation** ⚠️
+   - Status: Integration complete, API credits required
+   - Higgsfield API: Configured and authenticated
+   - Error: `403 Forbidden - Not enough credits`
+   - File saving logic: Tested and working
+   - Note: Add credits to Higgsfield account to enable image generation
+
+3. **Video Generation** ⚠️
+   - Status: Integration complete, API credits required
+   - Workflow: Text → Image → Video (using Higgsfield DoP)
+   - Note: Requires Higgsfield credits
+
+### Content Storage
+
+Generated content is persisted in:
+- **Local Path**: `/backend/public/generated/`
+- **URL Access**: `http://localhost:3000/generated/{filename}`
+- **File Types**:
+  - Images: `image-{timestamp}-{random}.png`
+  - Videos: `video-{timestamp}-{random}.mp4`
+  - Copy: `copy-{timestamp}.json`
+
+### Higgsfield AI Integration
+
+**API Configuration**:
+- Base URL: `https://platform.higgsfield.ai`
+- Authentication: API Key ID + Secret
+- Models:
+  - Image: `/higgsfield-ai/soul/standard`
+  - Video: `/higgsfield-ai/dop/standard`
+
+**Status**: Configured and tested. Requires account credits for generation.
 
 ## API Documentation
 
