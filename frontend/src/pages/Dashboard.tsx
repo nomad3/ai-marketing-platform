@@ -37,6 +37,7 @@ export default function Dashboard() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showContentGenerator, setShowContentGenerator] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
@@ -276,7 +277,7 @@ export default function Dashboard() {
               <p>Launch a new ad campaign</p>
             </button>
 
-            <button className="action-card card glass">
+            <button className="action-card card glass" onClick={() => setShowContentGenerator(true)}>
               <Zap className="action-icon" />
               <h3>Generate Content</h3>
               <p>Create AI-powered ads</p>
@@ -296,6 +297,12 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
+
+      {/* Content Generator Modal */}
+      <ContentGenerator
+        isOpen={showContentGenerator}
+        onClose={() => setShowContentGenerator(false)}
+      />
     </div>
   );
 }
