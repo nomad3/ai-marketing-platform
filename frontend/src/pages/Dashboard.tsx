@@ -321,13 +321,6 @@ export default function Dashboard() {
         isOpen={showContentGenerator}
         onClose={() => setShowContentGenerator(false)}
       />
-
-      {/* Campaign Creator Modal - Temporarily disabled */}
-      {/* <CampaignCreator
-        isOpen={showCampaignCreator}
-        onClose={() => setShowCampaignCreator(false)}
-        onCampaignCreated={handleCampaignCreated}
-      /> */}
     </div>
   );
 }
