@@ -10,6 +10,7 @@ import {
   Zap
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import ContentGenerator from '../components/ContentGenerator';
 import './Dashboard.css';
 
 interface Campaign {
