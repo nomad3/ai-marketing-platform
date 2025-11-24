@@ -10,7 +10,6 @@ import {
   Zap
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import CampaignCreator from '../components/CampaignCreator';
 import ContentGenerator from '../components/ContentGenerator';
 import './Dashboard.css';
 
@@ -329,8 +328,8 @@ export default function Dashboard() {
         onClose={() => setShowContentGenerator(false)}
       />
 
-      {/* Campaign Creator Modal */}
-      <CampaignCreator
+      {/* AI Campaign Builder Modal */}
+      <AICampaignBuilder
         isOpen={showCampaignCreator}
         onClose={() => setShowCampaignCreator(false)}
         onCampaignCreated={handleCampaignCreated}
