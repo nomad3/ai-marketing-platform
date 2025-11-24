@@ -39,6 +39,7 @@ export default function Dashboard() {
   const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null);
   const [loading, setLoading] = useState(true);
   const [showContentGenerator, setShowContentGenerator] = useState(false);
+  const [showCampaignCreator, setShowCampaignCreator] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
@@ -60,6 +61,11 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCampaignCreated = (campaign: Campaign) => {
+    setCampaigns(prev => [campaign, ...prev]);
+    fetchDashboardData(); // Refresh analytics
   };
 
   if (loading) {
@@ -120,7 +126,7 @@ export default function Dashboard() {
           </div>
           <button
             className="btn btn-primary"
-            onClick={() => alert('Create Campaign feature coming soon! This will open a campaign creation wizard.')}
+            onClick={() => setShowCampaignCreator(true)}
           >
             <Plus size={20} />
             New Campaign
@@ -282,7 +288,7 @@ export default function Dashboard() {
           <div className="actions-grid">
             <button
               className="action-card card glass"
-              onClick={() => alert('Create Campaign feature coming soon! This will open a campaign creation wizard.')}
+              onClick={() => setShowCampaignCreator(true)}
             >
               <Plus className="action-icon" />
               <h3>Create Campaign</h3>
@@ -320,6 +326,13 @@ export default function Dashboard() {
       <ContentGenerator
         isOpen={showContentGenerator}
         onClose={() => setShowContentGenerator(false)}
+      />
+
+      {/* Campaign Creator Modal */}
+      <CampaignCreator
+        isOpen={showCampaignCreator}
+        onClose={() => setShowCampaignCreator(false)}
+        onCampaignCreated={handleCampaignCreated}
       />
     </div>
   );
