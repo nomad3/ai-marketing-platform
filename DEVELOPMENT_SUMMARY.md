@@ -90,14 +90,23 @@ A comprehensive AI-powered marketing platform that enables users to create, mana
   - Higgsfield DoP integration
   - ⚠️ Requires API credits
 
-### 5. **Analytics Dashboard** 📈 NEW!
-- Comprehensive performance metrics
-- Time range filtering (7d, 30d, 90d, 1y)
-- Campaign performance table
-- Export functionality
-- Real-time data visualization
+### 5. **Analytics Dashboard**
+- **Comprehensive Metrics**: Displays total spend, revenue, ROI, ROAS, and more.
+- **Visualizations**: Key metrics cards with trend indicators.
+- **Campaign Performance**: Detailed table showing performance metrics for each campaign.
+- **Real-time Data**: Fetches data from the backend based on actual stored campaigns.
 
-### 6. **File Persistence System** 💾
+### 6. **Backend & Infrastructure**
+- **Persistent Storage**: Implemented file-based storage (`campaigns.json`) for campaigns.
+- **Metric Simulation**: Logic to generate realistic performance metrics for created campaigns.
+- **API Endpoints**:
+  - `/api/analytics/overview`: Aggregated performance data.
+  - `/api/analytics/campaigns`: Per-campaign performance metrics.
+  - `/api/campaigns`: CRUD operations with persistent storage.
+- **AI Integration**: Conversational AI for campaign creation (rule-based prototype).
+- **Higgsfield AI**: Integration for video generation (ready for credits).
+
+### 7. **File Persistence System** 💾
 - Automatic content saving to `backend/public/generated/`
 - Unique filename generation
 - Express static file serving
