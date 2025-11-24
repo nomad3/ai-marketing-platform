@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { Campaign, getCampaigns } from '../utils/storage.js';
 
 const router = Router();
 
@@ -23,13 +24,10 @@ router.get('/campaigns/:id', async (req, res) => {
         cpm: 20,
         conversionRate: 6,
       },
-      dateRange: {
-        start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-        end: new Date().toISOString(),
-      },
     });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch analytics' });
+    console.error('Campaign analytics error:', error);
+    res.status(500).json({ error: 'Failed to fetch campaign analytics' });
   }
 });
 
@@ -37,25 +35,85 @@ router.get('/campaigns/:id', async (req, res) => {
 router.get('/overview', async (req, res) => {
   try {
     const { range } = req.query;
+    const campaigns = await getCampaigns();
 
-    // Mock data variations based on range
+    // Calculate totals from all campaigns
+    const totals = campaigns.reduce((acc: any, campaign: Campaign) => {
+      const metrics = campaign.metrics || {
+        impressions: 0,
+        clicks: 0,
+        conversions: 0,
+        spend: 0,
+        revenue: 0
+      };
+
+      return {
+        spend: acc.spend + metrics.spend,
+        revenue: acc.revenue + metrics.revenue,
+        impressions: acc.impressions + metrics.impressions,
+        clicks: acc.clicks + metrics.clicks,
+        conversions: acc.conversions + metrics.conversions,
+      };
+    }, {
+      spend: 0,
+      revenue: 0,
+      impressions: 0,
+      clicks: 0,
+      conversions: 0
+    });
+
+    // Apply time range multiplier (simulation)
     const multiplier = range === '7d' ? 0.25 : range === '90d' ? 3 : range === '1y' ? 12 : 1;
 
+    const adjustedTotals = {
+      spend: Math.round(totals.spend * multiplier),
+      revenue: Math.round(totals.revenue * multiplier),
+      impressions: Math.round(totals.impressions * multiplier),
+      clicks: Math.round(totals.clicks * multiplier),
+      conversions: Math.round(totals.conversions * multiplier),
+    };
+
+    // Calculate derived metrics
+    const roi = adjustedTotals.spend > 0
+      ? ((adjustedTotals.revenue - adjustedTotals.spend) / adjustedTotals.spend) * 100
+      : 0;
+
+    const roas = adjustedTotals.spend > 0
+      ? adjustedTotals.revenue / adjustedTotals.spend
+      : 0;
+
+    const ctr = adjustedTotals.impressions > 0
+      ? (adjustedTotals.clicks / adjustedTotals.impressions) * 100
+      : 0;
+
+    const conversionRate = adjustedTotals.clicks > 0
+      ? (adjustedTotals.conversions / adjustedTotals.clicks) * 100
+      : 0;
+
+    const cpc = adjustedTotals.clicks > 0
+      ? adjustedTotals.spend / adjustedTotals.clicks
+      : 0;
+
+    const cpa = adjustedTotals.conversions > 0
+      ? adjustedTotals.spend / adjustedTotals.conversions
+      : 0;
+
     res.json({
-      totalSpend: Math.round(15000 * multiplier),
-      totalRevenue: Math.round(52500 * multiplier),
-      averageROI: 250,
-      averageROAS: 3.5,
-      activeCampaigns: 12,
-      totalImpressions: Math.round(500000 * multiplier),
-      totalClicks: Math.round(12500 * multiplier),
-      totalConversions: Math.round(750 * multiplier),
-      ctr: 2.5,
-      conversionRate: 6.0,
-      costPerClick: 1.20,
-      costPerConversion: 20.00,
+      totalSpend: adjustedTotals.spend,
+      totalRevenue: adjustedTotals.revenue,
+      averageROI: Math.round(roi),
+      averageROAS: Number(roas.toFixed(2)),
+      activeCampaigns: campaigns.filter((c: Campaign) => c.status === 'active').length,
+      totalImpressions: adjustedTotals.impressions,
+      totalClicks: adjustedTotals.clicks,
+      totalConversions: adjustedTotals.conversions,
+      ctr: Number(ctr.toFixed(2)),
+      conversionRate: Number(conversionRate.toFixed(2)),
+      costPerClick: Number(cpc.toFixed(2)),
+      costPerConversion: Number(cpa.toFixed(2)),
     });
   } catch (error) {
+    console.error('Analytics error:', error);
     res.status(500).json({ error: 'Failed to fetch overview' });
   }
 });
@@ -63,69 +121,37 @@ router.get('/overview', async (req, res) => {
 // Get all campaigns performance
 router.get('/campaigns', async (req, res) => {
   try {
-    const { range } = req.query;
+    const campaigns = await getCampaigns();
 
-    // Mock campaigns list
-    res.json({
-      campaigns: [
-        {
-          id: 'camp_1',
-          name: 'Summer Sale 2024',
-          platform: 'meta',
-          impressions: 25000,
-          clicks: 800,
-          conversions: 45,
-          spend: 1200,
-          revenue: 4500,
-          roi: 275,
-        },
-        {
-          id: 'camp_2',
-          name: 'Brand Awareness Q3',
-          platform: 'google',
-          impressions: 45000,
-          clicks: 1200,
-          conversions: 30,
-          spend: 2500,
-          revenue: 3000,
-          roi: 20,
-        },
-        {
-          id: 'camp_3',
-          name: 'Retargeting - Cart Abandoners',
-          platform: 'tiktok',
-          impressions: 15000,
-          clicks: 450,
-          conversions: 85,
-          spend: 800,
-          revenue: 3200,
-          roi: 300,
-        },
-        {
-          id: 'camp_4',
-          name: 'LinkedIn B2B Leads',
-          platform: 'linkedin',
-          impressions: 5000,
-          clicks: 150,
-          conversions: 12,
-          spend: 1500,
-          revenue: 6000,
-          roi: 300,
-        },
-        {
-          id: 'camp_5',
-          name: 'Instagram Stories Promo',
-          platform: 'meta',
-          impressions: 30000,
-          clicks: 950,
-          conversions: 55,
-          spend: 1000,
-          revenue: 3800,
-          roi: 280,
-        }
-      ]
+    const campaignsData = campaigns.map((campaign: Campaign) => {
+      const metrics = campaign.metrics || {
+        impressions: 0,
+        clicks: 0,
+        conversions: 0,
+        spend: 0,
+        revenue: 0
+      };
+
+      const roi = metrics.spend > 0
+        ? ((metrics.revenue - metrics.spend) / metrics.spend) * 100
+        : 0;
+
+      return {
+        id: campaign.id,
+        name: campaign.name,
+        platform: campaign.platform,
+        impressions: metrics.impressions,
+        clicks: metrics.clicks,
+        conversions: metrics.conversions,
+        spend: metrics.spend,
+        revenue: metrics.revenue,
+        roi: Math.round(roi),
+      };
     });
+
+    res.json({ campaigns: campaignsData });
   } catch (error) {
+    console.error('Campaigns analytics error:', error);
     res.status(500).json({ error: 'Failed to fetch campaigns analytics' });
   }
 });

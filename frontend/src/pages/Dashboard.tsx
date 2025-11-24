@@ -90,19 +90,19 @@ export default function Dashboard() {
         </div>
 
         <nav className="sidebar-nav">
-          <a href="#overview" className="nav-item active">
+          <a href="#" className="nav-item active" onClick={(e) => { e.preventDefault(); navigate('/dashboard'); }}>
             <LayoutDashboard size={20} />
             <span>Overview</span>
           </a>
-          <a href="#campaigns" className="nav-item">
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/dashboard'); }}>
             <Target size={20} />
             <span>Campaigns</span>
           </a>
-          <a href="#analytics" className="nav-item">
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/analytics'); }}>
             <BarChart3 size={20} />
             <span>Analytics</span>
           </a>
-          <a href="#content" className="nav-item">
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); setShowContentGenerator(true); }}>
             <Zap size={20} />
             <span>AI Content</span>
           </a>
@@ -127,14 +127,45 @@ export default function Dashboard() {
             <h1>Dashboard Overview</h1>
             <p>Monitor your campaigns and performance metrics</p>
           </div>
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowCampaignCreator(true)}
-          >
-            <Plus size={20} />
-            New Campaign
-          </button>
         </header>
+
+        {/* Quick Actions */}
+        <div className="quick-actions">
+          <div className="actions-grid">
+            <button
+              className="action-card card glass"
+              onClick={() => setShowCampaignCreator(true)}
+            >
+              <Plus className="action-icon" />
+              <h3>Create Campaign</h3>
+              <p>Launch a new ad campaign</p>
+            </button>
+
+            <button className="action-card card glass" onClick={() => setShowContentGenerator(true)}>
+              <Zap className="action-icon" />
+              <h3>Generate Content</h3>
+              <p>Create AI-powered ads</p>
+            </button>
+
+            <button
+              className="action-card card glass"
+              onClick={() => navigate('/analytics')}
+            >
+              <BarChart3 className="action-icon" />
+              <h3>View Analytics</h3>
+              <p>Detailed performance reports</p>
+            </button>
+
+            <button
+              className="action-card card glass"
+              onClick={() => alert('Optimization feature coming soon! This will provide AI-powered campaign recommendations.')}
+            >
+              <TrendingUp className="action-icon" />
+              <h3>Optimize Campaigns</h3>
+              <p>AI-powered recommendations</p>
+            </button>
+          </div>
+        </div>
 
         {/* Stats Grid */}
         <div className="stats-grid">
@@ -285,44 +316,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="quick-actions">
-          <h2>Quick Actions</h2>
-          <div className="actions-grid">
-            <button
-              className="action-card card glass"
-              onClick={() => setShowCampaignCreator(true)}
-            >
-              <Plus className="action-icon" />
-              <h3>Create Campaign</h3>
-              <p>Launch a new ad campaign</p>
-            </button>
 
-            <button className="action-card card glass" onClick={() => setShowContentGenerator(true)}>
-              <Zap className="action-icon" />
-              <h3>Generate Content</h3>
-              <p>Create AI-powered ads</p>
-            </button>
-
-            <button
-              className="action-card card glass"
-              onClick={() => navigate('/analytics')}
-            >
-              <BarChart3 className="action-icon" />
-              <h3>View Analytics</h3>
-              <p>Detailed performance reports</p>
-            </button>
-
-            <button
-              className="action-card card glass"
-              onClick={() => alert('Optimization feature coming soon! This will provide AI-powered campaign recommendations.')}
-            >
-              <TrendingUp className="action-icon" />
-              <h3>Optimize Campaigns</h3>
-              <p>AI-powered recommendations</p>
-            </button>
-          </div>
-        </div>
       </main>
 
       {/* Content Generator Modal */}

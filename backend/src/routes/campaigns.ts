@@ -1,24 +1,13 @@
 import { Router } from 'express';
+import { generateCampaignMetrics, getCampaigns, saveCampaign, updateCampaign } from '../utils/storage.js';
 
 const router = Router();
 
 // Get all campaigns
 router.get('/', async (req, res) => {
   try {
-    // TODO: Implement database query
-    res.json({
-      campaigns: [
-        {
-          id: 'camp_demo_1',
-          name: 'Summer Sale 2024',
-          platform: 'meta',
-          status: 'active',
-          budget: 1000,
-          objective: 'conversions',
-          createdAt: new Date().toISOString(),
-        },
-      ],
-    });
+    const campaigns = await getCampaigns();
+    res.json({ campaigns });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch campaigns' });
   }
@@ -29,7 +18,6 @@ router.post('/', async (req, res) => {
   try {
     const { name, platform, objective, budget, targeting } = req.body;
 
-    // TODO: Implement campaign creation via MCP server
     const campaign = {
       id: `camp_${Date.now()}`,
       name,
@@ -37,10 +25,18 @@ router.post('/', async (req, res) => {
       objective,
       budget,
       targeting,
-      status: 'draft',
+      status: 'draft' as const,
       createdAt: new Date().toISOString(),
+      metrics: {
+        impressions: 0,
+        clicks: 0,
+        conversions: 0,
+        spend: 0,
+        revenue: 0
+      }
     };
 
+    await saveCampaign(campaign);
     res.status(201).json({ campaign });
   } catch (error) {
     res.status(500).json({ error: 'Failed to create campaign' });
@@ -51,17 +47,14 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const campaigns = await getCampaigns();
+    const campaign = campaigns.find(c => c.id === id);
 
-    // TODO: Implement database query
-    res.json({
-      campaign: {
-        id,
-        name: 'Summer Sale 2024',
-        platform: 'meta',
-        status: 'active',
-        budget: 1000,
-      },
-    });
+    if (!campaign) {
+      return res.status(404).json({ error: 'Campaign not found' });
+    }
+
+    res.json({ campaign });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch campaign' });
   }
@@ -73,8 +66,13 @@ router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
 
-    // TODO: Implement campaign update
-    res.json({ campaign: { id, ...updates } });
+    const campaign = await updateCampaign(id, updates);
+
+    if (!campaign) {
+      return res.status(404).json({ error: 'Campaign not found' });
+    }
+
+    res.json({ campaign });
   } catch (error) {
     res.status(500).json({ error: 'Failed to update campaign' });
   }
@@ -99,6 +97,19 @@ router.post('/ai-builder', async (req, res) => {
 
     // Process user message with AI logic
     const response = await processUserMessage(userMessage, currentData, state, conversationHistory);
+
+    // If campaign is ready, save it
+    if (response.campaign) {
+      // Generate initial simulated metrics for the new campaign
+      const metrics = generateCampaignMetrics(response.campaign);
+      const campaignWithMetrics = {
+        ...response.campaign,
+        metrics
+      };
+
+      await saveCampaign(campaignWithMetrics);
+      response.campaign = campaignWithMetrics;
+    }
 
     res.json(response);
   } catch (error) {
@@ -202,7 +213,7 @@ async function processUserMessage(
         budget: newData.budget,
         dailyBudget: newData.dailyBudget,
         targetAudience: newData.targetAudience,
-        status: 'draft',
+        status: 'active', // Set to active so it shows up with metrics
         createdAt: new Date().toISOString(),
       };
 

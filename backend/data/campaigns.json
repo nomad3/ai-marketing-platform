@@ -1,0 +1,63 @@
+{
+  "campaigns": [
+    {
+      "id": "camp_demo_1",
+      "name": "Summer Sale 2024",
+      "platform": "meta",
+      "objective": "conversions",
+      "budget": 5000,
+      "dailyBudget": 166,
+      "targetAudience": {
+        "ageRange": [
+          25,
+          45
+        ],
+        "locations": [
+          "United States"
+        ],
+        "interests": [
+          "shopping"
+        ]
+      },
+      "status": "active",
+      "createdAt": "2024-05-01T10:00:00.000Z",
+      "metrics": {
+        "impressions": 150000,
+        "clicks": 3500,
+        "conversions": 120,
+        "spend": 4500,
+        "revenue": 18000
+      }
+    },
+    {
+      "id": "camp_demo_2",
+      "name": "Tech Gadgets Launch",
+      "platform": "google",
+      "objective": "traffic",
+      "budget": 3000,
+      "dailyBudget": 100,
+      "targetAudience": {
+        "ageRange": [
+          18,
+          35
+        ],
+        "locations": [
+          "United States",
+          "Canada"
+        ],
+        "interests": [
+          "technology"
+        ]
+      },
+      "status": "active",
+      "createdAt": "2024-05-10T14:30:00.000Z",
+      "metrics": {
+        "impressions": 80000,
+        "clicks": 4200,
+        "conversions": 50,
+        "spend": 2800,
+        "revenue": 5600
+      }
+    }
+  ]
+}
