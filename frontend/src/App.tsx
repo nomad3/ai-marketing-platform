@@ -1,5 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './index.css';
+import Dashboard from './pages/Dashboard';
 import LandingPage from './pages/LandingPage';
 
 function App() {
@@ -7,7 +8,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        {/* Dashboard and other routes will be added here */}
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );
