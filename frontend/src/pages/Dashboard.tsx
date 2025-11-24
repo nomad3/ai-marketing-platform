@@ -10,6 +10,7 @@ import {
   Zap
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AICampaignBuilder from '../components/AICampaignBuilder';
 import ContentGenerator from '../components/ContentGenerator';
 import './Dashboard.css';
@@ -36,6 +37,7 @@ interface AnalyticsOverview {
 }
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null);
   const [loading, setLoading] = useState(true);
@@ -304,7 +306,7 @@ export default function Dashboard() {
 
             <button
               className="action-card card glass"
-              onClick={() => alert('Analytics feature coming soon! This will show detailed performance reports.')}
+              onClick={() => navigate('/analytics')}
             >
               <BarChart3 className="action-icon" />
               <h3>View Analytics</h3>

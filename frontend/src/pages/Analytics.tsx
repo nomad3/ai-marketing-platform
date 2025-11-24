@@ -1,5 +1,6 @@
 import {
   ArrowDownRight,
+  ArrowLeft,
   ArrowUpRight,
   BarChart3,
   Calendar,
@@ -11,6 +12,7 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Analytics.css';
 
 interface AnalyticsData {
@@ -41,6 +43,7 @@ interface CampaignPerformance {
 }
 
 export default function Analytics() {
+  const navigate = useNavigate();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [campaigns, setCampaigns] = useState<CampaignPerformance[]>([]);
   const [loading, setLoading] = useState(true);
@@ -84,6 +87,10 @@ export default function Analytics() {
       {/* Header */}
       <header className="analytics-header">
         <div>
+          <button className="btn-back" onClick={() => navigate('/dashboard')}>
+            <ArrowLeft size={20} />
+            Back to Dashboard
+          </button>
           <h1>Analytics Dashboard</h1>
           <p>Comprehensive performance insights across all campaigns</p>
         </div>
