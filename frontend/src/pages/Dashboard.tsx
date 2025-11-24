@@ -118,7 +118,10 @@ export default function Dashboard() {
             <h1>Dashboard Overview</h1>
             <p>Monitor your campaigns and performance metrics</p>
           </div>
-          <button className="btn btn-primary">
+          <button
+            className="btn btn-primary"
+            onClick={() => alert('Create Campaign feature coming soon! This will open a campaign creation wizard.')}
+          >
             <Plus size={20} />
             New Campaign
           </button>
@@ -216,7 +219,12 @@ export default function Dashboard() {
         <div className="campaigns-section">
           <div className="section-header-row">
             <h2>Active Campaigns</h2>
-            <button className="btn btn-secondary">View All</button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => alert('View All Campaigns feature coming soon! This will show all your campaigns.')}
+            >
+              View All
+            </button>
           </div>
 
           <div className="campaigns-table card glass">
@@ -272,7 +280,10 @@ export default function Dashboard() {
         <div className="quick-actions">
           <h2>Quick Actions</h2>
           <div className="actions-grid">
-            <button className="action-card card glass">
+            <button
+              className="action-card card glass"
+              onClick={() => alert('Create Campaign feature coming soon! This will open a campaign creation wizard.')}
+            >
               <Plus className="action-icon" />
               <h3>Create Campaign</h3>
               <p>Launch a new ad campaign</p>
@@ -284,13 +295,19 @@ export default function Dashboard() {
               <p>Create AI-powered ads</p>
             </button>
 
-            <button className="action-card card glass">
+            <button
+              className="action-card card glass"
+              onClick={() => alert('Analytics feature coming soon! This will show detailed performance reports.')}
+            >
               <BarChart3 className="action-icon" />
               <h3>View Analytics</h3>
               <p>Detailed performance reports</p>
             </button>
 
-            <button className="action-card card glass">
+            <button
+              className="action-card card glass"
+              onClick={() => alert('Optimization feature coming soon! This will provide AI-powered campaign recommendations.')}
+            >
               <TrendingUp className="action-icon" />
               <h3>Optimize Campaigns</h3>
               <p>AI-powered recommendations</p>
