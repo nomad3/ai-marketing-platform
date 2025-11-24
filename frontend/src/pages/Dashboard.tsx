@@ -10,6 +10,7 @@ import {
   Zap
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import AICampaignBuilder from '../components/AICampaignBuilder';
 import ContentGenerator from '../components/ContentGenerator';
 import './Dashboard.css';
 
@@ -39,6 +40,7 @@ export default function Dashboard() {
   const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null);
   const [loading, setLoading] = useState(true);
   const [showContentGenerator, setShowContentGenerator] = useState(false);
+  const [showCampaignCreator, setShowCampaignCreator] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
@@ -60,6 +62,11 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCampaignCreated = (campaign: Campaign) => {
+    setCampaigns(prev => [campaign, ...prev]);
+    fetchDashboardData(); // Refresh analytics
   };
 
   if (loading) {
@@ -120,7 +127,7 @@ export default function Dashboard() {
           </div>
           <button
             className="btn btn-primary"
-            onClick={() => alert('AI Campaign Builder coming soon! This will let you create campaigns through conversation.')}
+            onClick={() => setShowCampaignCreator(true)}
           >
             <Plus size={20} />
             New Campaign
@@ -282,7 +289,7 @@ export default function Dashboard() {
           <div className="actions-grid">
             <button
               className="action-card card glass"
-              onClick={() => alert('AI Campaign Builder coming soon! This will let you create campaigns through conversation.')}
+              onClick={() => setShowCampaignCreator(true)}
             >
               <Plus className="action-icon" />
               <h3>Create Campaign</h3>
@@ -320,6 +327,13 @@ export default function Dashboard() {
       <ContentGenerator
         isOpen={showContentGenerator}
         onClose={() => setShowContentGenerator(false)}
+      />
+
+      {/* AI Campaign Builder Modal */}
+      <AICampaignBuilder
+        isOpen={showCampaignCreator}
+        onClose={() => setShowCampaignCreator(false)}
+        onCampaignCreated={handleCampaignCreated}
       />
     </div>
   );
