@@ -1,9 +1,55 @@
 import axios from 'axios';
 import { Router } from 'express';
+import fs from 'fs';
+import path from 'path';
+import { pipeline } from 'stream/promises';
 
 const router = Router();
 
 // Generate AI content
+// Helper to download and save file
+const downloadAndSaveFile = async (url: string, type: 'image' | 'video'): Promise<string> => {
+  try {
+    const response = await axios.get(url, { responseType: 'stream' });
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 1000);
+    const ext = type === 'image' ? 'png' : 'mp4';
+    const filename = `${type}-${timestamp}-${random}.${ext}`;
+    const relativePath = `generated/${filename}`;
+    const absolutePath = path.join(process.cwd(), 'public', relativePath);
+
+    // Ensure directory exists
+    await fs.promises.mkdir(path.dirname(absolutePath), { recursive: true });
+
+    await pipeline(response.data, fs.createWriteStream(absolutePath));
+
+    // Return the local URL (assuming server runs on localhost:3000)
+    // In production, this should use the actual domain
+    return `http://localhost:3000/${relativePath}`;
+  } catch (error) {
+    console.error(`Failed to save ${type}:`, error);
+    return url; // Fallback to original URL
+  }
+};
+
+// Save copy to file
+const saveCopyToFile = async (copy: any, prompt: string) => {
+  try {
+    const timestamp = Date.now();
+    const filename = `copy-${timestamp}.json`;
+    const relativePath = `generated/${filename}`;
+    const absolutePath = path.join(process.cwd(), 'public', relativePath);
+
+    await fs.promises.mkdir(path.dirname(absolutePath), { recursive: true });
+    await fs.promises.writeFile(absolutePath, JSON.stringify({ prompt, ...copy }, null, 2));
+
+    return `http://localhost:3000/${relativePath}`;
+  } catch (error) {
+    console.error('Failed to save copy:', error);
+    return null;
+  }
+};
+
 // Generate AI content
 router.post('/generate', async (req, res) => {
   try {
@@ -47,6 +93,8 @@ router.post('/generate', async (req, res) => {
       throw new Error('Generation timed out');
     };
 
+
+
     switch (type) {
       case 'image':
         try {
@@ -63,10 +111,15 @@ router.post('/generate', async (req, res) => {
 
           // Poll for result
           const imageResult = await pollStatus(imageResponse.data.status_url);
+          const remoteUrl = imageResult.images[0].url;
+
+          // Save to local volume
+          const localUrl = await downloadAndSaveFile(remoteUrl, 'image');
 
           content = {
             type: 'image',
-            url: imageResult.images[0].url,
+            url: localUrl,
+            originalUrl: remoteUrl,
             prompt,
             style,
             dimensions: dimensions || { width: 1200, height: 628 },
@@ -142,6 +195,10 @@ router.post('/generate', async (req, res) => {
       case 'copy':
         // Generate dynamic ad copy based on the prompt
         const generatedCopy = generateAdCopy(prompt, style);
+
+        // Save to file
+        await saveCopyToFile(generatedCopy, prompt);
+
         content = {
           type: 'copy',
           headline: generatedCopy.headline,
