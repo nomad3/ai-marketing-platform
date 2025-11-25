@@ -94,7 +94,7 @@ export default function Dashboard() {
             <LayoutDashboard size={20} />
             <span>Overview</span>
           </a>
-          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/dashboard'); }}>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/campaigns'); }}>
             <Target size={20} />
             <span>Campaigns</span>
           </a>
@@ -261,7 +261,7 @@ export default function Dashboard() {
             <h2>Active Campaigns</h2>
             <button
               className="btn btn-secondary"
-              onClick={() => alert('View All Campaigns feature coming soon! This will show all your campaigns.')}
+              onClick={() => navigate('/campaigns')}
             >
               View All
             </button>
