@@ -534,6 +534,18 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 app.use('/generated', express.static('public/generated'));
 ```
 
+**Hardcoded URLs (Production Bug):**
+```typescript
+// ❌ WRONG: Breaks in production
+return `http://localhost:3000/${relativePath}`;
+
+// ✅ CORRECT: Use env vars or relative paths
+const getBaseUrl = () => process.env.PUBLIC_URL || '';
+return `${getBaseUrl()}/${relativePath}`;
+```
+
+**Rule:** Never hardcode `localhost` URLs in production code. Use `process.env.*` or relative paths.
+
 ### Debug Mode
 ```bash
 # Enable debug logging
