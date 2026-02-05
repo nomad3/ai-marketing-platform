@@ -1,17 +1,24 @@
 import {
   ArrowLeft,
+  BarChart3,
   Filter,
+  LayoutDashboard,
   LayoutGrid,
   List,
+  LogOut,
   MoreHorizontal,
   Plus,
   Search,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Target,
+  Zap
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import AICampaignBuilder from '../components/AICampaignBuilder';
 import './Campaigns.css';
+import './Dashboard.css'; // Import dashboard styles for sidebar
 
 interface Campaign {
   id: string;
@@ -32,6 +39,7 @@ interface Campaign {
 
 export default function Campaigns() {
   const navigate = useNavigate();
+  const { user, logout, isAuthenticated } = useAuth();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
@@ -41,8 +49,18 @@ export default function Campaigns() {
   const [showCampaignCreator, setShowCampaignCreator] = useState(false);
 
   useEffect(() => {
+    // Redirect to login if not authenticated
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
     fetchCampaigns();
-  }, []);
+  }, [isAuthenticated, navigate]);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
   const fetchCampaigns = async () => {
     try {
@@ -89,14 +107,59 @@ export default function Campaigns() {
   }
 
   return (
-    <div className="campaigns-page">
-      {/* Header */}
-      <header className="campaigns-header">
-        <div className="header-content">
-          <button className="btn-back" onClick={() => navigate('/dashboard')}>
-            <ArrowLeft size={20} />
-            Back to Dashboard
-          </button>
+    <div className="dashboard">
+      {/* Sidebar */}
+      <aside className="dashboard-sidebar glass">
+        <div className="sidebar-header">
+          <Zap className="sidebar-logo" />
+          <span>AI Marketing</span>
+        </div>
+
+        <nav className="sidebar-nav">
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/dashboard'); }}>
+            <LayoutDashboard size={20} />
+            <span>Overview</span>
+          </a>
+          <a href="#" className="nav-item active" onClick={(e) => { e.preventDefault(); navigate('/campaigns'); }}>
+            <Target size={20} />
+            <span>Campaigns</span>
+          </a>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/analytics'); }}>
+            <BarChart3 size={20} />
+            <span>Analytics</span>
+          </a>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/content'); }}>
+            <Zap size={20} />
+            <span>AI Content</span>
+          </a>
+        </nav>
+
+        <div className="sidebar-footer">
+          <div className="user-profile">
+            <div className="user-avatar">
+              {user?.name?.split(' ').map(n => n[0]).join('') || 'U'}
+            </div>
+            <div className="user-info">
+              <div className="user-name">{user?.name || 'User'}</div>
+              <div className="user-email">{user?.email || ''}</div>
+            </div>
+            <button 
+              className="logout-btn" 
+              onClick={handleLogout}
+              title="Logout"
+            >
+              <LogOut size={16} />
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="dashboard-main">
+        <div className="campaigns-page">
+          {/* Header */}
+          <header className="campaigns-header">
+            <div className="header-content">
           <h1>Campaigns</h1>
           <p>Manage and monitor your advertising campaigns</p>
         </div>
@@ -274,12 +337,14 @@ export default function Campaigns() {
         </div>
       )}
 
-      {/* AI Campaign Builder Modal */}
-      <AICampaignBuilder
-        isOpen={showCampaignCreator}
-        onClose={() => setShowCampaignCreator(false)}
-        onCampaignCreated={handleCampaignCreated}
-      />
+        {/* AI Campaign Builder Modal */}
+        <AICampaignBuilder
+          isOpen={showCampaignCreator}
+          onClose={() => setShowCampaignCreator(false)}
+          onCampaignCreated={handleCampaignCreated}
+        />
+      </div>
+      </main>
     </div>
   );
 }

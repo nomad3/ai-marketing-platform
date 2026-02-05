@@ -40,7 +40,7 @@ export default function LandingPage() {
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
             <a href="#pricing">Pricing</a>
-            <a href="/dashboard" className="btn btn-primary">Get Started</a>
+            <a href="/register" className="btn btn-primary">Get Started</a>
           </div>
         </div>
       </nav>
@@ -63,10 +63,10 @@ export default function LandingPage() {
               All from one powerful platform.
             </p>
             <div className="hero-cta">
-              <button className="btn btn-primary btn-large">
+              <a href="/register" className="btn btn-primary btn-large">
                 <Rocket size={20} />
                 Start Free Trial
-              </button>
+              </a>
               <button className="btn btn-secondary btn-large">
                 <Play size={20} />
                 Watch Demo
@@ -234,10 +234,10 @@ export default function LandingPage() {
             <h2>Ready to Transform Your Marketing?</h2>
             <p>Join thousands of businesses using AI to create better ads and drive more revenue</p>
             <div className="cta-buttons">
-              <button className="btn btn-primary btn-large">
+              <a href="/register" className="btn btn-primary btn-large">
                 Start Free Trial
                 <ArrowRight size={20} />
-              </button>
+              </a>
               <button className="btn btn-secondary btn-large">
                 Schedule Demo
               </button>

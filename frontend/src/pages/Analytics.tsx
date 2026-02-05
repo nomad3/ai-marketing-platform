@@ -7,6 +7,8 @@ import {
   DollarSign,
   Download,
   Eye,
+  LayoutDashboard,
+  LogOut,
   MousePointer,
   ShoppingCart,
   TrendingUp,
@@ -18,6 +20,8 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import './Dashboard.css'; // Import dashboard styles for sidebar
 import {
   AreaChart,
   Area,
@@ -121,6 +125,7 @@ interface ABTestResult {
 
 export default function Analytics() {
   const navigate = useNavigate();
+  const { user, logout, isAuthenticated } = useAuth();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [campaigns, setCampaigns] = useState<CampaignPerformance[]>([]);
   const [timeSeriesData, setTimeSeriesData] = useState<TimeSeriesData[]>([]);
@@ -133,8 +138,18 @@ export default function Analytics() {
   const [showABTests, setShowABTests] = useState(false);
 
   useEffect(() => {
+    // Redirect to login if not authenticated
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
     fetchAnalytics();
-  }, [timeRange]);
+  }, [timeRange, isAuthenticated, navigate]);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
   const fetchAnalytics = async () => {
     try {
@@ -305,14 +320,59 @@ export default function Analytics() {
   };
 
   return (
-    <div className="analytics-page">
-      {/* Header */}
-      <header className="analytics-header">
-        <div>
-          <button className="btn-back" onClick={() => navigate('/dashboard')}>
-            <ArrowLeft size={20} />
-            Back to Dashboard
-          </button>
+    <div className="dashboard">
+      {/* Sidebar */}
+      <aside className="dashboard-sidebar glass">
+        <div className="sidebar-header">
+          <Zap className="sidebar-logo" />
+          <span>AI Marketing</span>
+        </div>
+
+        <nav className="sidebar-nav">
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/dashboard'); }}>
+            <LayoutDashboard size={20} />
+            <span>Overview</span>
+          </a>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/campaigns'); }}>
+            <Target size={20} />
+            <span>Campaigns</span>
+          </a>
+          <a href="#" className="nav-item active" onClick={(e) => { e.preventDefault(); navigate('/analytics'); }}>
+            <BarChart3 size={20} />
+            <span>Analytics</span>
+          </a>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/content'); }}>
+            <Zap size={20} />
+            <span>AI Content</span>
+          </a>
+        </nav>
+
+        <div className="sidebar-footer">
+          <div className="user-profile">
+            <div className="user-avatar">
+              {user?.name?.split(' ').map(n => n[0]).join('') || 'U'}
+            </div>
+            <div className="user-info">
+              <div className="user-name">{user?.name || 'User'}</div>
+              <div className="user-email">{user?.email || ''}</div>
+            </div>
+            <button 
+              className="logout-btn" 
+              onClick={handleLogout}
+              title="Logout"
+            >
+              <LogOut size={16} />
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="dashboard-main">
+        <div className="analytics-page">
+          {/* Header */}
+          <header className="analytics-header">
+            <div>
           <h1>Analytics Dashboard</h1>
           <p>Comprehensive performance insights across all campaigns</p>
         </div>
@@ -856,6 +916,8 @@ export default function Analytics() {
           </table>
         </div>
       </div>
+    </div>
+    </main>
     </div>
   );
 }

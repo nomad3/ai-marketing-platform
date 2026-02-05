@@ -4,6 +4,7 @@ import {
   DollarSign,
   Eye,
   LayoutDashboard,
+  LogOut,
   Plus,
   Target,
   TrendingUp,
@@ -11,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import AICampaignBuilder from '../components/AICampaignBuilder';
 import ContentGenerator from '../components/ContentGenerator';
 import CampaignTemplates from '../components/CampaignTemplates';
@@ -39,6 +41,7 @@ interface AnalyticsOverview {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { user, logout, isAuthenticated } = useAuth();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null);
   const [loading, setLoading] = useState(true);
@@ -47,8 +50,18 @@ export default function Dashboard() {
   const [showCampaignTemplates, setShowCampaignTemplates] = useState(false);
 
   useEffect(() => {
+    // Redirect to login if not authenticated
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
     fetchDashboardData();
-  }, []);
+  }, [isAuthenticated, navigate]);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
   const fetchDashboardData = async () => {
     try {
@@ -124,7 +137,7 @@ export default function Dashboard() {
             <BarChart3 size={20} />
             <span>Analytics</span>
           </a>
-          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); setShowContentGenerator(true); }}>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/content'); }}>
             <Zap size={20} />
             <span>AI Content</span>
           </a>
@@ -132,11 +145,20 @@ export default function Dashboard() {
 
         <div className="sidebar-footer">
           <div className="user-profile">
-            <div className="user-avatar">DU</div>
-            <div className="user-info">
-              <div className="user-name">Demo User</div>
-              <div className="user-email">demo@ai.com</div>
+            <div className="user-avatar">
+              {user?.name?.split(' ').map(n => n[0]).join('') || 'U'}
             </div>
+            <div className="user-info">
+              <div className="user-name">{user?.name || 'User'}</div>
+              <div className="user-email">{user?.email || ''}</div>
+            </div>
+            <button 
+              className="logout-btn" 
+              onClick={handleLogout}
+              title="Logout"
+            >
+              <LogOut size={16} />
+            </button>
           </div>
         </div>
       </aside>
