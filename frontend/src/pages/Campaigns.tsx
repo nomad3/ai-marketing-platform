@@ -1,5 +1,4 @@
 import {
-  ArrowLeft,
   BarChart3,
   Filter,
   LayoutDashboard,

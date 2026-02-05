@@ -260,7 +260,7 @@ async function generateReportData(campaigns: any[], selectedMetrics: string[], t
       costPerClick: totals.clicks > 0 ? totals.spend / totals.clicks : 0,
       costPerConversion: totals.conversions > 0 ? totals.spend / totals.conversions : 0
     });
-  });
+  }
 
   // Calculate overall averages
   if (campaigns.length > 0) {

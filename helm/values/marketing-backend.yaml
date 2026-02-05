@@ -87,6 +87,8 @@ configMap:
   data:
     NODE_ENV: "production"
     PORT: "3000"
+    DATABASE_URL: "postgresql://postgres:postgres@marketing-db:5432/marketing_platform"
+    JWT_SECRET: "mktg-platform-jwt-s3cret-k3y-2026-prod"
 
 # No tmp volumes needed
 tmpVolumes:

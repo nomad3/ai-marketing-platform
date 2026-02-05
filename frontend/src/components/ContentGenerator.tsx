@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import './ContentGenerator.css';
 
 interface ContentGeneratorProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 interface ContentTemplate {
@@ -23,7 +23,7 @@ interface GenerationOptions {
   format: string;
 }
 
-export default function ContentGenerator({ isOpen, onClose }: ContentGeneratorProps) {
+export default function ContentGenerator({ isOpen = true, onClose = () => {} }: ContentGeneratorProps) {
   const [contentType, setContentType] = useState<'image' | 'video' | 'copy'>('copy');
   const [prompt, setPrompt] = useState('');
   const [style, setStyle] = useState('');

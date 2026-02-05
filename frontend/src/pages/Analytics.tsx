@@ -1,6 +1,5 @@
 import {
   ArrowDownRight,
-  ArrowLeft,
   ArrowUpRight,
   BarChart3,
   Calendar,
