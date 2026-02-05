@@ -58,9 +58,9 @@ service:
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
 
-# Ingress - using own ingress for marketing.agentprovision.com
+# Ingress - disabled, sharing astronomy-ingress load balancer
 ingress:
-  enabled: true
+  enabled: false
   ingressClass: gce
   hostnames:
     - marketing.agentprovision.com
@@ -103,9 +103,9 @@ podLabels:
   tier: frontend
   environment: prod
 
-# Managed Certificate for HTTPS
+# Managed Certificate - disabled, using shared ingress cert
 managedCertificate:
-  enabled: true
+  enabled: false
   domains:
     - marketing.agentprovision.com
 
