@@ -5,6 +5,7 @@ import analyticsRoutes from './routes/analytics.js';
 import authRoutes from './routes/auth.js';
 import campaignRoutes from './routes/campaigns.js';
 import contentRoutes from './routes/content.js';
+import reportsRoutes from './routes/reports.js';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/campaigns', campaignRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/content', contentRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
