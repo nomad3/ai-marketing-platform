@@ -1,190 +1,380 @@
-# AI Marketing Platform 🚀
+# 🚀 AI Marketing Platform — SmartAds
 
-A comprehensive digital marketing AI agency platform that leverages MCP servers to create, manage, and optimize paid advertising campaigns with AI-generated content.
+> AI-powered marketing campaign management with multi-platform support, intelligent content generation, and real-time analytics.
 
-**Production URL**: [smartads.agentprovision.com](https://smartads.agentprovision.com)
+[![Live Site](https://img.shields.io/badge/live-marketing.agentprovision.com-success)](https://marketing.agentprovision.com)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## Features
+---
 
-### 🎯 Core Capabilities
-- **Meta Ads Integration** - Create and manage Facebook/Instagram ads via MCP server
-- **AI Content Generation** - Generate images, videos, and copy using cutting-edge AI tools
-  - Hugging Face AI for image generation
-  - Nano Banana for creative assets
-  - AI video generators for video content
-- **ROI Tracking** - Real-time campaign performance and return on investment analytics
-- **Multi-Platform Support** - Manage campaigns across Meta, Google, TikTok, and more
-- **Automated Optimization** - AI-driven campaign improvements and A/B testing
+## Overview
 
-### 🛠️ Technology Stack
-- **MCP Server** - Model Context Protocol for AI integrations
-- **Node.js/TypeScript** - Backend server and MCP implementation
-- **React** - Modern web interface
-- **PostgreSQL** - Campaign and analytics data storage
-- **Redis** - Caching and real-time data
-- **Meta Marketing API** - Facebook/Instagram advertising
-- **AI Services** - Hugging Face, Nano Banana, video generation APIs
+**SmartAds** is a comprehensive digital marketing platform that leverages AI to create, manage, and optimize paid advertising campaigns across Meta, Google, TikTok, LinkedIn, and YouTube. Features include an AI-powered campaign builder wizard, real-time analytics with interactive charts, intelligent content generation, campaign templates, and a full reporting system.
 
-## Project Structure
+**Production URL**: [marketing.agentprovision.com](https://marketing.agentprovision.com)
+
+---
+
+## ✨ Key Features
+
+### 🎯 AI Campaign Builder
+- Conversational AI wizard for campaign creation
+- Intelligent data extraction from natural language
+- Platform-specific optimization suggestions
+- Budget allocation recommendations
+- Real-time campaign preview
+
+### 📊 Analytics Dashboard
+- Interactive charts with Recharts
+- ROI tracking and conversion metrics
+- A/B test results visualization
+- Platform performance comparison
+- Exportable reports (JSON, CSV, PDF)
+
+### ✍️ AI Content Generator
+- Multi-format generation (copy, images, video concepts)
+- Platform-optimized prompts and targeting
+- Template-based content creation
+- Advanced audience and tone options
+- Generation history tracking
+
+### 📋 Campaign Templates
+- Pre-built templates for common use cases (e-commerce, B2B, brand awareness, local business, mobile)
+- Industry-specific configurations
+- Expected performance metrics
+- Difficulty levels and popularity ratings
+
+### 📈 Reports API
+- Performance overview, platform comparison, A/B test results
+- Creative performance and conversion funnel analysis
+- Multiple export formats
+
+### 🔐 Authentication System
+- JWT-based auth with registration and login
+- User management with company profiles
+- Role-based access control
+
+---
+
+## 🏗️ Architecture
 
 ```
-ai-marketing-platform/
-├── mcp-server/           # MCP server implementation
-│   ├── src/
-│   │   ├── tools/        # MCP tools for ad creation, content generation
-│   │   ├── resources/    # Campaign data, analytics resources
-│   │   ├── prompts/      # AI prompts for content generation
-│   │   └── index.ts      # MCP server entry point
-│   └── package.json
-├── backend/              # REST API backend
-│   ├── src/
-│   │   ├── routes/       # API routes
-│   │   ├── services/     # Business logic
-│   │   ├── models/       # Database models
-│   │   └── index.ts
-│   └── package.json
-├── frontend/             # React web application
-│   ├── src/
-│   │   ├── components/   # UI components
-│   │   ├── pages/        # Application pages
-│   │   ├── services/     # API clients
-│   │   └── App.tsx
-│   └── package.json
-└── docker-compose.yml    # Development environment
+┌──────────────────────────────────────────────────┐
+│       Frontend (React + TypeScript + Vite)        │
+│       Recharts · CSS Variables · Glassmorphism    │
+├──────────────────────────────────────────────────┤
+│  Landing │ Dashboard │ Campaigns │ Analytics      │
+│  Content Generator │ Campaign Builder │ Templates │
+│  Login │ Register                                 │
+└──────────────────┬───────────────────────────────┘
+                   │ Nginx reverse proxy (/api → backend)
+┌──────────────────┴───────────────────────────────┐
+│       Backend (Node.js + Express + TypeScript)     │
+│       JWT Auth · PostgreSQL · REST API             │
+├──────────────────────────────────────────────────┤
+│  Auth │ Campaigns │ Analytics │ Content │ Reports  │
+│  AI Campaign Builder                               │
+└──────────┬───────────────────┬───────────────────┘
+           │                   │
+      ┌────┴─────┐       ┌───┴──────┐
+      │PostgreSQL │       │  OpenAI  │
+      │          │       │   API    │
+      └──────────┘       └──────────┘
+
+┌──────────────────────────────────────────────────┐
+│       MCP Server (Model Context Protocol)         │
+│       AI content services · Campaign tools        │
+└──────────────────────────────────────────────────┘
 ```
 
-## Getting Started
+### Docker Setup
+- **Frontend**: Nginx serves built React app, reverse proxies `/api` → `backend:3000`
+- **Backend**: Node.js/Express on port 3000
+- **PostgreSQL**: Initialized from `database/init.sql` with seed data
+- **Helm chart**: Symlinked from intothespace's reusable microservice chart
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend
+| Technology | Purpose |
+|-----------|---------|
+| Node.js + TypeScript | API server |
+| Express.js | REST framework |
+| PostgreSQL | Campaign, analytics, and user data |
+| JWT | Authentication |
+| OpenAI API | Content generation |
+
+### Frontend
+| Technology | Purpose |
+|-----------|---------|
+| React + TypeScript | UI framework |
+| Vite | Build tool |
+| React Router | Navigation |
+| Recharts | Data visualization |
+| Lucide React | Icon library |
+| CSS Custom Properties | Glassmorphism design system |
+
+### Infrastructure
+| Technology | Purpose |
+|-----------|---------|
+| Docker | Containerization |
+| Nginx | Frontend server + API reverse proxy |
+| GKE Autopilot | Kubernetes orchestration |
+| Helm | Deployment charts |
+| PostgreSQL | Cloud SQL (production) |
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 18+
-- PostgreSQL 14+
-- Redis 7+
-- Meta Developer Account
-- API keys for AI services
+- Docker & Docker Compose (recommended)
 
-### Installation
+### Docker Compose (Recommended)
 
-1. Clone the repository:
 ```bash
 git clone <repository-url>
 cd ai-marketing-platform
-```
 
-2. Install dependencies:
-```bash
-# Install MCP server dependencies
-cd mcp-server && npm install
-
-# Install backend dependencies
-cd ../backend && npm install
-
-# Install frontend dependencies
-cd ../frontend && npm install
-```
-
-3. Configure environment variables:
-```bash
-# Copy example env files
-cp mcp-server/.env.example mcp-server/.env
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
-```
-
-4. Start development environment:
-```bash
+# Start all services (PostgreSQL auto-initializes with schema + seed data)
 docker-compose up -d
-npm run dev
+
+# Services:
+#   Frontend:  http://localhost:8080
+#   Backend:   http://localhost:3000
+#   PostgreSQL: localhost:5432
 ```
 
-## MCP Server Usage
+### Local Development
 
-The MCP server provides tools for:
-- Creating ad campaigns
-- Generating AI content (images, videos, copy)
-- Tracking ROI and analytics
-- Optimizing campaigns
+```bash
+# Backend
+cd backend && npm install
+cp .env.example .env    # Configure DATABASE_URL, JWT_SECRET, OPENAI_API_KEY
+npm run dev             # → http://localhost:3000
 
-### Example MCP Tool Call
+# Frontend
+cd frontend && npm install
+cp .env.example .env    # Set VITE_API_URL=http://localhost:3000
+npm run dev             # → http://localhost:5173
 
-```typescript
-// Create a new ad campaign with AI-generated content
-{
-  "tool": "create_ad_campaign",
-  "arguments": {
-    "platform": "meta",
-    "objective": "conversions",
-    "budget": 1000,
-    "target_audience": {
-      "age_range": [25, 45],
-      "interests": ["technology", "business"]
-    },
-    "generate_content": {
-      "image": true,
-      "copy": true,
-      "video": false
-    }
-  }
-}
+# MCP Server (optional)
+cd mcp-server && npm install
+npm run dev             # → http://localhost:3001
 ```
 
-}
+### Environment Variables
+
+**Backend (.env)**
+```bash
+PORT=3000
+NODE_ENV=development
+DATABASE_URL=postgresql://user:pass@localhost:5432/marketing
+JWT_SECRET=your-secret-key
+OPENAI_API_KEY=your-openai-key
 ```
 
-## Testing
+**Frontend (.env)**
+```bash
+VITE_API_URL=http://localhost:3000
+```
 
-### End-to-End Test Results
+---
 
-**✅ Content Persistence**: All generated content is automatically saved to `backend/public/generated/`
+## 📁 Project Structure
 
-**Test Results** (2025-11-24):
+```
+ai-marketing-platform/
+├── backend/
+│   ├── src/
+│   │   ├── routes/
+│   │   │   ├── auth.ts              # JWT authentication
+│   │   │   ├── campaigns.ts         # Campaign CRUD & management
+│   │   │   ├── analytics.ts         # Metrics & performance data
+│   │   │   ├── content.ts           # Content generation
+│   │   │   ├── reports.ts           # Report generation & export
+│   │   │   └── ai-campaign-builder.ts # AI wizard endpoint
+│   │   ├── utils/                   # Storage, helpers
+│   │   └── index.ts                 # Express server entry
+│   ├── public/generated/            # AI-generated content storage
+│   ├── Dockerfile
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── LandingPage.tsx      # Marketing homepage
+│   │   │   ├── Dashboard.tsx        # Main dashboard
+│   │   │   ├── Campaigns.tsx        # Campaign management (list/grid)
+│   │   │   ├── Analytics.tsx        # Interactive charts & metrics
+│   │   │   ├── Content.tsx          # Content management
+│   │   │   ├── Login.tsx            # Authentication
+│   │   │   └── Register.tsx         # User registration
+│   │   ├── components/
+│   │   │   ├── AICampaignBuilder.tsx    # Conversational campaign wizard
+│   │   │   ├── ContentGenerator.tsx     # Multi-format content creation
+│   │   │   ├── CampaignTemplates.tsx    # Template selector
+│   │   │   └── CampaignCreator.tsx      # Campaign creation form
+│   │   ├── context/                 # React context providers
+│   │   └── App.tsx
+│   ├── Dockerfile
+│   └── package.json
+│
+├── mcp-server/                      # Model Context Protocol server
+│   ├── src/
+│   │   ├── services/                # AI content, analytics, campaigns
+│   │   └── index.ts                 # MCP entry point
+│   └── package.json
+│
+├── database/
+│   └── init.sql                     # Schema + seed data (users, campaigns, metrics)
+│
+├── helm/
+│   ├── charts/microservice/         # Reusable Helm chart (symlink from intothespace)
+│   └── values/
+│       ├── marketing-backend.yaml
+│       └── marketing-frontend.yaml
+│
+├── docker-compose.yml
+├── deploy.sh
+└── Makefile
+```
 
-1. **Copy Generation** ✅
-   - Status: Working perfectly
-   - Files saved: `copy-{timestamp}.json`
-   - Location: `backend/public/generated/`
-   - Verification: Multiple test files created successfully
+---
 
-2. **Image Generation** ⚠️
-   - Status: Integration complete, API credits required
-   - Higgsfield API: Configured and authenticated
-   - Error: `403 Forbidden - Not enough credits`
-   - File saving logic: Tested and working
-   - Note: Add credits to Higgsfield account to enable image generation
+## 🔌 API Endpoints
 
-3. **Video Generation** ⚠️
-   - Status: Integration complete, API credits required
-   - Workflow: Text → Image → Video (using Higgsfield DoP)
-   - Note: Requires Higgsfield credits
+### Authentication
+```
+POST /api/auth/register          # Create account
+POST /api/auth/login             # Get JWT tokens
+GET  /api/auth/me                # Current user
+```
 
-### Content Storage
+### Campaigns
+```
+GET    /api/campaigns            # List campaigns (filterable by platform, status)
+POST   /api/campaigns            # Create campaign
+PUT    /api/campaigns/:id        # Update campaign
+DELETE /api/campaigns/:id        # Delete campaign
+```
 
-Generated content is persisted in:
-- **Local Path**: `/backend/public/generated/`
-- **URL Access**: `http://localhost:3000/generated/{filename}`
-- **File Types**:
-  - Images: `image-{timestamp}-{random}.png`
-  - Videos: `video-{timestamp}-{random}.mp4`
-  - Copy: `copy-{timestamp}.json`
+### Analytics
+```
+GET  /api/analytics/overview     # Aggregate metrics (spend, revenue, ROI, ROAS)
+GET  /api/analytics/campaigns    # Per-campaign performance
+```
 
-### Higgsfield AI Integration
+### Content & AI
+```
+POST /api/content/generate       # Generate copy, images, or video concepts
+POST /api/ai-campaign-builder    # AI-powered campaign wizard
+```
 
-**API Configuration**:
-- Base URL: `https://platform.higgsfield.ai`
-- Authentication: API Key ID + Secret
-- Models:
-  - Image: `/higgsfield-ai/soul/standard`
-  - Video: `/higgsfield-ai/dop/standard`
+### Reports
+```
+POST /api/reports/performance    # Performance overview
+POST /api/reports/platform       # Platform comparison
+POST /api/reports/ab-test        # A/B test results
+POST /api/reports/creative       # Creative performance
+POST /api/reports/funnel         # Conversion funnel
+```
 
-**Status**: Configured and tested. Requires account credits for generation.
+---
 
-## API Documentation
+## 🎨 Design System
 
-See [API.md](./docs/API.md) for detailed API documentation.
+Glassmorphism-based dark theme:
 
-## Contributing
+```css
+--primary: #6366f1;
+--bg-primary: #0a0e27;
+--bg-secondary: #111525;
+--text-primary: #ffffff;
+--text-secondary: #94a3b8;
+```
 
-Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
+Glass effect cards with `backdrop-filter: blur(10px)` and subtle borders.
 
-## License
+---
 
-MIT License - see [LICENSE](./LICENSE) for details.
+## 🗄️ Database Schema
+
+PostgreSQL with the following core tables:
+
+- **users** — Accounts with email, password hash, company, role
+- **campaigns** — Campaign definitions with platform, objective, budget, targeting (JSONB)
+- **ad_creatives** — Generated content (images, video, copy) linked to campaigns
+- **campaign_metrics** — Daily performance data (impressions, clicks, conversions, spend)
+- **content_generations** — AI generation history and metadata
+
+Schema auto-initializes from `database/init.sql` on first Docker Compose startup.
+
+---
+
+## 🌐 Deployment
+
+### Production (GKE Autopilot)
+
+Live at **[marketing.agentprovision.com](https://marketing.agentprovision.com)**
+
+```bash
+# Build and push images
+docker buildx build --platform linux/amd64 \
+  -t gcr.io/PROJECT/marketing-frontend:latest --push frontend/
+
+docker buildx build --platform linux/amd64 \
+  -t gcr.io/PROJECT/marketing-backend:latest --push backend/
+
+# Deploy with Helm
+helm upgrade --install marketing-frontend ./helm/charts/microservice \
+  -f ./helm/values/marketing-frontend.yaml -n prod
+
+helm upgrade --install marketing-backend ./helm/charts/microservice \
+  -f ./helm/values/marketing-backend.yaml -n prod
+```
+
+### Docker Production
+
+```bash
+docker-compose up -d --build
+# Nginx frontend on :8080, API on :3000, PostgreSQL on :5432
+```
+
+---
+
+## 📋 Recent Highlights
+
+- **PostgreSQL Migration** — Migrated from file-based JSON storage to PostgreSQL with proper schema, seed data, and migrations
+- **JWT Auth System** — Full registration/login flow with protected routes
+- **Campaign Builder Wizard** — AI-powered conversational interface for creating campaigns
+- **Analytics Dashboard** — Interactive Recharts-based charts with ROI, ROAS, A/B testing
+- **Content Generator Enhancement** — Platform-optimized prompts, audience targeting, tone selection
+- **Campaign Templates** — Pre-built templates for e-commerce, B2B, brand awareness, local business, mobile
+- **Reports API** — Multi-format export (JSON, CSV, PDF) with 5 report types
+- **GKE Deployment** — Full Kubernetes deployment with Helm charts and PostgreSQL
+
+---
+
+## 🤝 Contributing
+
+1. Create feature branch (`git checkout -b feature/new-feature`)
+2. Commit with conventional commits (`feat:`, `fix:`, `docs:`)
+3. Push and open a Pull Request
+
+---
+
+## 📄 License
+
+MIT License — see [LICENSE](LICENSE)
+
+---
+
+<div align="center">
+
+**Built with AI for smarter marketing** 🎯
+
+</div>
