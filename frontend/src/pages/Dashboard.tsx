@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AICampaignBuilder from '../components/AICampaignBuilder';
 import ContentGenerator from '../components/ContentGenerator';
+import CampaignTemplates from '../components/CampaignTemplates';
 import './Dashboard.css';
 
 interface Campaign {
@@ -43,6 +44,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [showContentGenerator, setShowContentGenerator] = useState(false);
   const [showCampaignCreator, setShowCampaignCreator] = useState(false);
+  const [showCampaignTemplates, setShowCampaignTemplates] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
@@ -68,6 +70,26 @@ export default function Dashboard() {
 
   const handleCampaignCreated = (campaign: Campaign) => {
     setCampaigns(prev => [campaign, ...prev]);
+    fetchDashboardData(); // Refresh analytics
+  };
+
+  const handleTemplateSelected = (template: any) => {
+    // Create a new campaign from template
+    const newCampaign = {
+      id: `camp_${Date.now()}`,
+      name: template.name,
+      platform: template.platform[0], // Use first platform
+      status: 'draft',
+      budget: template.budget.recommended,
+      spend: 0,
+      roi: 0,
+      createdAt: new Date().toISOString(),
+      templateId: template.id,
+      objective: template.objective,
+      targeting: template.targeting
+    };
+    
+    setCampaigns(prev => [newCampaign, ...prev]);
     fetchDashboardData(); // Refresh analytics
   };
 
@@ -138,7 +160,16 @@ export default function Dashboard() {
             >
               <Plus className="action-icon" />
               <h3>Create Campaign</h3>
-              <p>Launch a new ad campaign</p>
+              <p>AI-powered campaign builder</p>
+            </button>
+
+            <button
+              className="action-card card glass"
+              onClick={() => setShowCampaignTemplates(true)}
+            >
+              <Target className="action-icon" />
+              <h3>Use Template</h3>
+              <p>Start with proven templates</p>
             </button>
 
             <button className="action-card card glass" onClick={() => setShowContentGenerator(true)}>
@@ -330,6 +361,13 @@ export default function Dashboard() {
         isOpen={showCampaignCreator}
         onClose={() => setShowCampaignCreator(false)}
         onCampaignCreated={handleCampaignCreated}
+      />
+
+      {/* Campaign Templates Modal */}
+      <CampaignTemplates
+        isOpen={showCampaignTemplates}
+        onClose={() => setShowCampaignTemplates(false)}
+        onSelectTemplate={handleTemplateSelected}
       />
     </div>
   );
