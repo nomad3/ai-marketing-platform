@@ -147,7 +147,7 @@ export default function ContentGenerator({ isOpen, onClose }: ContentGeneratorPr
       // Enhanced request with more context
       const enhancedPrompt = generateEnhancedPrompt();
       
-      const response = await fetch('http://localhost:3000/api/content/generate', {
+      const response = await fetch('/api/content/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -225,7 +225,7 @@ export default function ContentGenerator({ isOpen, onClose }: ContentGeneratorPr
       'banner': { width: 1200, height: 300 }
     };
     
-    return dimensionMap[generationOptions.format] || { width: 1200, height: 628 };
+    return dimensionMap[generationOptions.format as keyof typeof dimensionMap] || { width: 1200, height: 628 };
   };
 
   const copyToClipboard = (text: string) => {
@@ -585,7 +585,7 @@ export default function ContentGenerator({ isOpen, onClose }: ContentGeneratorPr
                       {generatedContent.variations && (
                         <div className="copy-variations">
                           <h4>Alternative Versions</h4>
-                          {generatedContent.variations.map((variation, index) => (
+                          {generatedContent.variations.map((variation: string, index: number) => (
                             <div key={index} className="variation-item">
                               <span className="variation-label">Version {index + 1}</span>
                               <div className="variation-content">{variation}</div>

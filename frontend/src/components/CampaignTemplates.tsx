@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { 
   Target, 
-  Users, 
   TrendingUp, 
-  ShoppingCart, 
-  MessageSquare, 
   ArrowRight,
   Sparkles,
   X,

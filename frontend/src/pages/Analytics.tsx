@@ -129,7 +129,7 @@ export default function Analytics() {
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('30d');
   const [selectedChart, setSelectedChart] = useState<'revenue' | 'roi' | 'performance' | 'conversions'>('revenue');
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+  const [_selectedPlatforms, _setSelectedPlatforms] = useState<string[]>([]);
   const [showABTests, setShowABTests] = useState(false);
 
   useEffect(() => {
@@ -139,12 +139,12 @@ export default function Analytics() {
   const fetchAnalytics = async () => {
     try {
       // Fetch overview analytics
-      const response = await fetch(`http://localhost:3000/api/analytics/overview?range=${timeRange}`);
+      const response = await fetch(`/api/analytics/overview?range=${timeRange}`);
       const data = await response.json();
       setAnalytics(data);
 
       // Fetch campaign performance
-      const campaignsResponse = await fetch(`http://localhost:3000/api/analytics/campaigns?range=${timeRange}`);
+      const campaignsResponse = await fetch(`/api/analytics/campaigns?range=${timeRange}`);
       const campaignsData = await campaignsResponse.json();
       setCampaigns(campaignsData.campaigns || []);
 

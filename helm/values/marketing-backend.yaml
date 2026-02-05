@@ -1,0 +1,120 @@
+# Values for AI Marketing Platform backend deployment
+serviceName: marketing-backend
+namespace: prod
+environment: prod
+
+# Image configuration
+image:
+  repository: gcr.io/ai-agency-479516/marketing-backend
+  pullPolicy: Always
+  tag: "latest"
+
+# Service account
+serviceAccount:
+  create: true
+  annotations: {}
+  name: "marketing-backend-sa"
+
+# Replica count and autoscaling
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+
+# Resources - Node.js backend
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Security context
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  runAsNonRoot: true
+  runAsUser: 1000
+  capabilities:
+    drop:
+    - ALL
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 3000
+  targetPort: 3000
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+
+# Ingress - disabled, frontend proxies to us
+ingress:
+  enabled: false
+
+# Health checks
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 3000
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 3000
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+# ConfigMap for environment variables
+configMap:
+  enabled: true
+  data:
+    NODE_ENV: "production"
+    PORT: "3000"
+
+# No tmp volumes needed
+tmpVolumes:
+  enabled: false
+
+# Pod labels
+podLabels:
+  app: marketing-backend
+  tier: backend
+  environment: prod
+
+# Managed Certificate - disabled, frontend handles HTTPS
+managedCertificate:
+  enabled: false
+
+# Backend Config for health checks
+backendConfig:
+  enabled: true
+  healthCheck:
+    checkIntervalSec: 15
+    timeoutSec: 15
+    healthyThreshold: 1
+    unhealthyThreshold: 2
+    type: HTTP
+    requestPath: /health
+    port: 3000
+
+# Pod Disruption Budget
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 0

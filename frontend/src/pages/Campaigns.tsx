@@ -46,7 +46,7 @@ export default function Campaigns() {
 
   const fetchCampaigns = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/campaigns');
+      const response = await fetch('/api/campaigns');
       const data = await response.json();
       setCampaigns(data.campaigns);
     } catch (error) {

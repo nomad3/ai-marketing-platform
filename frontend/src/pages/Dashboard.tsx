@@ -53,12 +53,12 @@ export default function Dashboard() {
   const fetchDashboardData = async () => {
     try {
       // Fetch campaigns
-      const campaignsRes = await fetch('http://localhost:3000/api/campaigns');
+      const campaignsRes = await fetch('/api/campaigns');
       const campaignsData = await campaignsRes.json();
       setCampaigns(campaignsData.campaigns || []);
 
       // Fetch analytics
-      const analyticsRes = await fetch('http://localhost:3000/api/analytics/overview');
+      const analyticsRes = await fetch('/api/analytics/overview');
       const analyticsData = await analyticsRes.json();
       setAnalytics(analyticsData);
     } catch (error) {

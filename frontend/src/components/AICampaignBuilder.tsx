@@ -70,7 +70,7 @@ export default function AICampaignBuilder({ isOpen, onClose, onCampaignCreated }
 
     try {
       // Send to backend AI agent
-      const response = await fetch('http://localhost:3000/api/campaigns/ai-builder', {
+      const response = await fetch('/api/campaigns/ai-builder', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

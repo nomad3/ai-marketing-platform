@@ -36,7 +36,7 @@ export default function CampaignCreator({ isOpen, onClose, onCampaignCreated }: 
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3000/api/campaigns', {
+      const response = await fetch('/api/campaigns', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

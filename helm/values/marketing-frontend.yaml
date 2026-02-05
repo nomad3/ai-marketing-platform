@@ -1,0 +1,126 @@
+# Values for AI Marketing Platform frontend deployment
+serviceName: marketing-frontend
+namespace: prod
+environment: prod
+
+# Image configuration
+image:
+  repository: gcr.io/ai-agency-479516/marketing-frontend
+  pullPolicy: Always
+  tag: "latest"
+
+# Service account
+serviceAccount:
+  create: true
+  annotations: {}
+  name: "marketing-frontend-sa"
+
+# Replica count and autoscaling
+replicaCount: 1
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+
+# Resources - optimized for static website (lightweight)
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+# Security context - nginx runs as user 101
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 101
+  fsGroup: 101
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 101
+  capabilities:
+    drop:
+    - ALL
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+
+# Ingress - using own ingress for marketing.agentprovision.com
+ingress:
+  enabled: true
+  ingressClass: gce
+  hostnames:
+    - marketing.agentprovision.com
+
+# Health checks
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 80
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+# ConfigMap
+configMap:
+  enabled: false
+
+# Temp volumes for nginx
+tmpVolumes:
+  enabled: true
+  volumes:
+    - name: nginx-cache
+      mountPath: /var/cache/nginx
+    - name: nginx-run
+      mountPath: /var/run
+
+# Pod labels
+podLabels:
+  app: marketing-frontend
+  tier: frontend
+  environment: prod
+
+# Managed Certificate for HTTPS
+managedCertificate:
+  enabled: true
+  domains:
+    - marketing.agentprovision.com
+
+# Backend Config for health checks
+backendConfig:
+  enabled: true
+  healthCheck:
+    checkIntervalSec: 15
+    timeoutSec: 15
+    healthyThreshold: 1
+    unhealthyThreshold: 2
+    type: HTTP
+    requestPath: /health
+
+# Pod Disruption Budget
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 0
