@@ -7,6 +7,9 @@ import { pipeline } from 'stream/promises';
 const router = Router();
 
 // Generate AI content
+// Base URL for generated content (relative path for production compatibility)
+const getBaseUrl = () => process.env.PUBLIC_URL || '';
+
 // Helper to download and save file
 const downloadAndSaveFile = async (url: string, type: 'image' | 'video'): Promise<string> => {
   try {
@@ -23,9 +26,8 @@ const downloadAndSaveFile = async (url: string, type: 'image' | 'video'): Promis
 
     await pipeline(response.data, fs.createWriteStream(absolutePath));
 
-    // Return the local URL (assuming server runs on localhost:3000)
-    // In production, this should use the actual domain
-    return `http://localhost:3000/${relativePath}`;
+    // Return relative URL for production compatibility
+    return `${getBaseUrl()}/${relativePath}`;
   } catch (error) {
     console.error(`Failed to save ${type}:`, error);
     return url; // Fallback to original URL
@@ -43,7 +45,7 @@ const saveCopyToFile = async (copy: any, prompt: string) => {
     await fs.promises.mkdir(path.dirname(absolutePath), { recursive: true });
     await fs.promises.writeFile(absolutePath, JSON.stringify({ prompt, ...copy }, null, 2));
 
-    return `http://localhost:3000/${relativePath}`;
+    return `${getBaseUrl()}/${relativePath}`;
   } catch (error) {
     console.error('Failed to save copy:', error);
     return null;
