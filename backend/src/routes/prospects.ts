@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { query } from '../db.js';
 import { scoreProspect } from '../services/signal-scorer.js';
 import { generateResearchBrief } from '../services/research-generator.js';
+import { discoverProspects, saveDiscoveredProspects } from '../services/prospect-discovery.js';
 
 const router = Router();
 
@@ -133,6 +134,51 @@ router.post('/', async (req, res) => {
   } catch (error) {
     console.error('Error creating prospect:', error);
     res.status(500).json({ error: 'Failed to create prospect' });
+  }
+});
+
+// POST /api/prospects/discover - AI prospect discovery
+router.post('/discover', async (req, res) => {
+  try {
+    const { industry, revenue_min, revenue_max, geography, ownership_type, max_results, additional_criteria } = req.body;
+
+    if (!industry) {
+      return res.status(400).json({ error: 'industry is required' });
+    }
+
+    const prospects = await discoverProspects({
+      industry,
+      revenue_min: revenue_min || undefined,
+      revenue_max: revenue_max || undefined,
+      geography: geography || undefined,
+      ownership_type: ownership_type || undefined,
+      max_results: max_results || 10,
+      additional_criteria: additional_criteria || undefined,
+    });
+
+    res.json({ prospects, count: prospects.length });
+  } catch (error) {
+    console.error('Error discovering prospects:', error);
+    res.status(500).json({ error: 'Failed to discover prospects' });
+  }
+});
+
+// POST /api/prospects/discover/save - Save discovered prospects to pipeline
+router.post('/discover/save', async (req, res) => {
+  try {
+    const userId = req.user?.id || 1;
+    const { prospects } = req.body;
+
+    if (!prospects || !Array.isArray(prospects) || prospects.length === 0) {
+      return res.status(400).json({ error: 'prospects array is required' });
+    }
+
+    const saved = await saveDiscoveredProspects(prospects, userId);
+
+    res.status(201).json({ prospects: saved, count: saved.length });
+  } catch (error) {
+    console.error('Error saving discovered prospects:', error);
+    res.status(500).json({ error: 'Failed to save prospects' });
   }
 });
 
