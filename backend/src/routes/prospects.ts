@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { query } from '../db.js';
+import { scoreProspect } from '../services/signal-scorer.js';
 
 const router = Router();
 
@@ -313,6 +314,35 @@ router.post('/:id/notes', async (req, res) => {
   } catch (error) {
     console.error('Error adding note:', error);
     res.status(500).json({ error: 'Failed to add note' });
+  }
+});
+
+// POST /api/prospects/:id/score - Run AI scoring on a prospect
+router.post('/:id/score', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Verify prospect exists
+    const prospectCheck = await query(`SELECT id FROM prospects WHERE id = $1 AND is_archived = false`, [id]);
+    if (prospectCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Prospect not found' });
+    }
+
+    const result = await scoreProspect(parseInt(id));
+
+    // Return updated prospect with signals
+    const prospectResult = await query(`SELECT * FROM prospects WHERE id = $1`, [id]);
+    const signalsResult = await query(`SELECT * FROM prospect_signals WHERE prospect_id = $1 AND is_active = true ORDER BY signal_strength DESC`, [id]);
+
+    res.json({
+      prospect: prospectResult.rows[0],
+      signals: signalsResult.rows,
+      score: result.score,
+      score_breakdown: result.score_breakdown,
+    });
+  } catch (error) {
+    console.error('Error scoring prospect:', error);
+    res.status(500).json({ error: 'Failed to score prospect' });
   }
 });
 
