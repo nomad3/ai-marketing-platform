@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getCampaigns, getCampaignById } from '../utils/storage.js';
 import { getCampaignMetrics, getAggregateMetrics, getPerformanceOverTime, getPlatformPerformance } from '../utils/metrics.js';
+import { query } from '../db.js';
 
 const router = Router();
 
@@ -240,6 +241,137 @@ router.get('/compare', async (req, res) => {
   } catch (error) {
     console.error('Campaign comparison error:', error);
     res.status(500).json({ error: 'Failed to compare campaigns' });
+  }
+});
+
+// ============================================
+// Deal Intelligence Pipeline Analytics
+// ============================================
+
+// GET /api/analytics/pipeline - Funnel metrics
+router.get('/pipeline', async (req, res) => {
+  try {
+    const stagesResult = await query(`
+      SELECT stage, COUNT(*) as count
+      FROM prospects WHERE is_archived = false
+      GROUP BY stage
+      ORDER BY CASE stage
+        WHEN 'lead' THEN 1
+        WHEN 'contacted' THEN 2
+        WHEN 'engaged' THEN 3
+        WHEN 'active_deal' THEN 4
+        WHEN 'closed_won' THEN 5
+        WHEN 'closed_lost' THEN 6
+      END
+    `);
+
+    const totalResult = await query(`SELECT COUNT(*) as total FROM prospects WHERE is_archived = false`);
+    const hotResult = await query(`SELECT COUNT(*) as count FROM prospects WHERE is_archived = false AND sell_likelihood_score >= 70`);
+    const activeResult = await query(`SELECT COUNT(*) as count FROM prospects WHERE is_archived = false AND stage = 'active_deal'`);
+    const recentSignals = await query(`SELECT COUNT(*) as count FROM prospect_signals WHERE detected_at >= NOW() - INTERVAL '7 days' AND is_active = true`);
+
+    // Conversion rates between stages
+    const stages = stagesResult.rows;
+    const conversions: any[] = [];
+    for (let i = 0; i < stages.length - 1; i++) {
+      const fromCount = parseInt(stages[i].count);
+      const toCount = parseInt(stages[i + 1]?.count || '0');
+      if (fromCount > 0) {
+        conversions.push({
+          from: stages[i].stage,
+          to: stages[i + 1]?.stage,
+          rate: Math.round((toCount / fromCount) * 100),
+        });
+      }
+    }
+
+    res.json({
+      stages: stagesResult.rows,
+      total_prospects: parseInt(totalResult.rows[0].total),
+      hot_prospects: parseInt(hotResult.rows[0].count),
+      active_deals: parseInt(activeResult.rows[0].count),
+      recent_signals: parseInt(recentSignals.rows[0].count),
+      conversions,
+    });
+  } catch (error) {
+    console.error('Pipeline analytics error:', error);
+    res.status(500).json({ error: 'Failed to fetch pipeline analytics' });
+  }
+});
+
+// GET /api/analytics/signals - Signal distribution and effectiveness
+router.get('/signals', async (req, res) => {
+  try {
+    const categoryDist = await query(`
+      SELECT signal_category, COUNT(*) as count, AVG(signal_strength) as avg_strength
+      FROM prospect_signals WHERE is_active = true
+      GROUP BY signal_category ORDER BY count DESC
+    `);
+
+    const topSignals = await query(`
+      SELECT signal_type, signal_category, COUNT(*) as count, AVG(signal_strength) as avg_strength
+      FROM prospect_signals WHERE is_active = true
+      GROUP BY signal_type, signal_category ORDER BY avg_strength DESC LIMIT 10
+    `);
+
+    const scoreDistribution = await query(`
+      SELECT
+        CASE
+          WHEN sell_likelihood_score >= 90 THEN '90-100'
+          WHEN sell_likelihood_score >= 70 THEN '70-89'
+          WHEN sell_likelihood_score >= 50 THEN '50-69'
+          WHEN sell_likelihood_score >= 30 THEN '30-49'
+          ELSE '0-29'
+        END as range,
+        COUNT(*) as count
+      FROM prospects WHERE is_archived = false AND sell_likelihood_score > 0
+      GROUP BY range ORDER BY range DESC
+    `);
+
+    res.json({
+      category_distribution: categoryDist.rows,
+      top_signals: topSignals.rows,
+      score_distribution: scoreDistribution.rows,
+    });
+  } catch (error) {
+    console.error('Signal analytics error:', error);
+    res.status(500).json({ error: 'Failed to fetch signal analytics' });
+  }
+});
+
+// GET /api/analytics/attribution - Campaign-to-prospect attribution
+router.get('/attribution', async (req, res) => {
+  try {
+    const result = await query(`
+      SELECT c.name as campaign_name, c.platform, COUNT(p.id) as prospect_count,
+             AVG(p.sell_likelihood_score) as avg_score
+      FROM prospects p
+      JOIN campaigns c ON p.source_campaign_id = c.id
+      WHERE p.is_archived = false
+      GROUP BY c.name, c.platform
+      ORDER BY prospect_count DESC
+    `);
+
+    const sourceBreakdown = await query(`
+      SELECT source, COUNT(*) as count
+      FROM prospects WHERE is_archived = false
+      GROUP BY source ORDER BY count DESC
+    `);
+
+    const industryBreakdown = await query(`
+      SELECT industry, COUNT(*) as count, AVG(sell_likelihood_score) as avg_score
+      FROM prospects WHERE is_archived = false AND industry IS NOT NULL
+      GROUP BY industry ORDER BY count DESC
+    `);
+
+    res.json({
+      campaign_attribution: result.rows,
+      source_breakdown: sourceBreakdown.rows,
+      industry_breakdown: industryBreakdown.rows,
+    });
+  } catch (error) {
+    console.error('Attribution analytics error:', error);
+    res.status(500).json({ error: 'Failed to fetch attribution analytics' });
   }
 });
 
