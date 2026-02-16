@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { query } from '../db.js';
 import { scoreProspect } from '../services/signal-scorer.js';
+import { generateResearchBrief } from '../services/research-generator.js';
 
 const router = Router();
 
@@ -314,6 +315,31 @@ router.post('/:id/notes', async (req, res) => {
   } catch (error) {
     console.error('Error adding note:', error);
     res.status(500).json({ error: 'Failed to add note' });
+  }
+});
+
+// POST /api/prospects/:id/research - Generate AI research brief
+router.post('/:id/research', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const prospectCheck = await query(`SELECT id FROM prospects WHERE id = $1 AND is_archived = false`, [id]);
+    if (prospectCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Prospect not found' });
+    }
+
+    const brief = await generateResearchBrief(parseInt(id));
+
+    // Return updated prospect
+    const prospectResult = await query(`SELECT * FROM prospects WHERE id = $1`, [id]);
+
+    res.json({
+      prospect: prospectResult.rows[0],
+      research: brief,
+    });
+  } catch (error) {
+    console.error('Error generating research brief:', error);
+    res.status(500).json({ error: 'Failed to generate research brief' });
   }
 });
 
