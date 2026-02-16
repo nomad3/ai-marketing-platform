@@ -6,10 +6,12 @@ import {
   DollarSign,
   Download,
   Eye,
+  GitBranch,
   LayoutDashboard,
   LogOut,
   MousePointer,
   ShoppingCart,
+  Sparkles,
   TrendingUp,
   Target,
   Users,
@@ -132,9 +134,11 @@ export default function Analytics() {
   const [abTestResults, setAbTestResults] = useState<ABTestResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('30d');
-  const [selectedChart, setSelectedChart] = useState<'revenue' | 'roi' | 'performance' | 'conversions'>('revenue');
+  const [selectedChart, setSelectedChart] = useState<'revenue' | 'roi' | 'performance' | 'conversions' | 'pipeline'>('revenue');
   const [_selectedPlatforms, _setSelectedPlatforms] = useState<string[]>([]);
   const [showABTests, setShowABTests] = useState(false);
+  const [pipelineData, setPipelineData] = useState<any>(null);
+  const [signalData, setSignalData] = useState<any>(null);
 
   useEffect(() => {
     // Redirect to login if not authenticated
@@ -170,6 +174,20 @@ export default function Analytics() {
       
       // Generate A/B test results
       setAbTestResults(generateABTestData());
+
+      // Fetch pipeline analytics
+      try {
+        const pipelineRes = await fetch('/api/analytics/pipeline');
+        const pData = await pipelineRes.json();
+        setPipelineData(pData);
+      } catch (e) { console.error('Pipeline analytics unavailable:', e); }
+
+      // Fetch signal analytics
+      try {
+        const signalRes = await fetch('/api/analytics/signals');
+        const sData = await signalRes.json();
+        setSignalData(sData);
+      } catch (e) { console.error('Signal analytics unavailable:', e); }
     } catch (error) {
       console.error('Failed to fetch analytics:', error);
     } finally {
@@ -324,7 +342,7 @@ export default function Analytics() {
       <aside className="dashboard-sidebar glass">
         <div className="sidebar-header">
           <Zap className="sidebar-logo" />
-          <span>AI Marketing</span>
+          <span>HCA Deal Intel</span>
         </div>
 
         <nav className="sidebar-nav">
@@ -343,6 +361,18 @@ export default function Analytics() {
           <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/content'); }}>
             <Zap size={20} />
             <span>AI Content</span>
+          </a>
+
+          <div style={{ padding: '1rem 1rem 0.5rem', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', fontWeight: 600 }}>
+            Deal Intelligence
+          </div>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/prospects'); }}>
+            <Users size={20} />
+            <span>Prospects</span>
+          </a>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/pipeline'); }}>
+            <GitBranch size={20} />
+            <span>Pipeline</span>
           </a>
         </nav>
 
@@ -493,11 +523,18 @@ export default function Analytics() {
           >
             Performance Metrics
           </button>
-          <button 
+          <button
             className={`tab ${selectedChart === 'conversions' ? 'active' : ''}`}
             onClick={() => setSelectedChart('conversions')}
           >
             Conversion Funnel
+          </button>
+          <button
+            className={`tab ${selectedChart === 'pipeline' ? 'active' : ''}`}
+            onClick={() => setSelectedChart('pipeline')}
+          >
+            <Sparkles size={14} style={{ marginRight: 4 }} />
+            Pipeline
           </button>
         </div>
         <div className="chart-filters">
@@ -617,26 +654,154 @@ export default function Analytics() {
                 <YAxis stroke="#888" />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend />
-                <Bar 
-                  dataKey="impressions" 
-                  fill="#667eea" 
+                <Bar
+                  dataKey="impressions"
+                  fill="#667eea"
                   name="Impressions"
                   opacity={0.7}
                 />
-                <Bar 
-                  dataKey="clicks" 
-                  fill="#4ecdc4" 
+                <Bar
+                  dataKey="clicks"
+                  fill="#4ecdc4"
                   name="Clicks"
                   opacity={0.8}
                 />
-                <Bar 
-                  dataKey="conversions" 
-                  fill="#ff6b6b" 
+                <Bar
+                  dataKey="conversions"
+                  fill="#ff6b6b"
                   name="Conversions"
                   opacity={0.9}
                 />
               </BarChart>
             </ResponsiveContainer>
+          </div>
+        )}
+
+        {selectedChart === 'pipeline' && (
+          <div className="chart-container">
+            <h3>Deal Pipeline Analytics</h3>
+            {pipelineData ? (
+              <div className="pipeline-analytics-grid">
+                {/* Funnel by Stage */}
+                <div className="pipeline-chart-half">
+                  <h4>Prospects by Stage</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={
+                      pipelineData.stages
+                        ? pipelineData.stages.map((s: any) => ({ name: s.stage.replace('_', ' '), count: parseInt(s.count) }))
+                        : [
+                            { name: 'Lead', count: pipelineData.stage_lead || 0 },
+                            { name: 'Contacted', count: pipelineData.stage_contacted || 0 },
+                            { name: 'Engaged', count: pipelineData.stage_engaged || 0 },
+                            { name: 'Active Deal', count: pipelineData.stage_active_deal || 0 },
+                            { name: 'Closed Won', count: pipelineData.stage_closed_won || 0 },
+                            { name: 'Closed Lost', count: pipelineData.stage_closed_lost || 0 },
+                          ]
+                    }>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                      <XAxis dataKey="name" stroke="#888" fontSize={12} />
+                      <YAxis stroke="#888" />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Bar dataKey="count" name="Prospects" radius={[4, 4, 0, 0]}>
+                        {['#b8c1ec', '#667eea', '#00f2fe', '#fee140', '#48c78e', '#f5576c'].map((color, i) => (
+                          <Cell key={i} fill={color} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Industry Breakdown */}
+                <div className="pipeline-chart-half">
+                  <h4>Industry Distribution</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={
+                          signalData?.industry_breakdown
+                            ? signalData.industry_breakdown.map((ind: any) => ({
+                                name: ind.industry.replace('_', ' '),
+                                value: parseInt(ind.count),
+                              }))
+                            : [
+                                { name: 'Healthcare', value: 3 },
+                                { name: 'Consumer', value: 2 },
+                                { name: 'Industrial', value: 2 },
+                                { name: 'Business Services', value: 3 },
+                              ]
+                        }
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={100}
+                        label={({ name, value }) => `${name}: ${value}`}
+                        dataKey="value"
+                      >
+                        {['#00f2fe', '#f093fb', '#fee140', '#667eea'].map((color, i) => (
+                          <Cell key={i} fill={color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Summary Cards */}
+                <div className="pipeline-summary-row">
+                  <div className="pipeline-metric glass">
+                    <span className="pipeline-metric-label">Total Prospects</span>
+                    <span className="pipeline-metric-value" style={{ color: '#667eea' }}>{pipelineData.total_prospects || 0}</span>
+                  </div>
+                  <div className="pipeline-metric glass">
+                    <span className="pipeline-metric-label">Hot Prospects (70+)</span>
+                    <span className="pipeline-metric-value" style={{ color: '#00f2fe' }}>{pipelineData.hot_prospects || 0}</span>
+                  </div>
+                  <div className="pipeline-metric glass">
+                    <span className="pipeline-metric-label">Active Deals</span>
+                    <span className="pipeline-metric-value" style={{ color: '#fee140' }}>{pipelineData.active_deals || 0}</span>
+                  </div>
+                  <div className="pipeline-metric glass">
+                    <span className="pipeline-metric-label">Avg Score</span>
+                    <span className="pipeline-metric-value" style={{ color: '#48c78e' }}>{pipelineData.avg_score ? Math.round(pipelineData.avg_score) : 0}</span>
+                  </div>
+                  <div className="pipeline-metric glass">
+                    <span className="pipeline-metric-label">Recent Signals (7d)</span>
+                    <span className="pipeline-metric-value" style={{ color: '#f093fb' }}>{pipelineData.recent_signals || 0}</span>
+                  </div>
+                </div>
+
+                {/* Top Signals Table */}
+                {signalData?.top_signals && signalData.top_signals.length > 0 && (
+                  <div className="signal-table-section">
+                    <h4>Top Scoring Signals</h4>
+                    <table className="signal-table">
+                      <thead>
+                        <tr>
+                          <th>Category</th>
+                          <th>Type</th>
+                          <th>Avg Strength</th>
+                          <th>Occurrences</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {signalData.top_signals.slice(0, 8).map((sig: any, i: number) => (
+                          <tr key={i}>
+                            <td><span className="signal-category-badge">{sig.signal_category.replace('_', ' ')}</span></td>
+                            <td>{sig.signal_type.replace(/_/g, ' ')}</td>
+                            <td><span className="signal-strength">{parseFloat(sig.avg_strength).toFixed(1)}</span></td>
+                            <td>{sig.count}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                <Sparkles size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+                <p>No pipeline data available yet. Add prospects to see analytics.</p>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -569,6 +569,96 @@ tr:last-child td {
   color: white;
 }
 
+/* Pipeline Analytics Tab */
+.pipeline-analytics-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.pipeline-analytics-grid h4 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: #94a3b8;
+}
+
+.pipeline-analytics-grid > div:first-child {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.pipeline-chart-half {
+  min-height: 340px;
+}
+
+.pipeline-summary-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+
+.pipeline-metric {
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.pipeline-metric-label {
+  display: block;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.pipeline-metric-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Signal Table */
+.signal-table-section {
+  margin-top: 0.5rem;
+}
+
+.signal-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.signal-table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  color: #94a3b8;
+  font-weight: 500;
+  font-size: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.signal-table td {
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  text-transform: capitalize;
+}
+
+.signal-category-badge {
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(102, 126, 234, 0.15);
+  color: #667eea;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.signal-strength {
+  font-weight: 600;
+  color: #00f2fe;
+}
+
 @media (max-width: 768px) {
   .analytics-header {
     flex-direction: column;
@@ -611,5 +701,13 @@ tr:last-child td {
 
   .test-metrics {
     grid-template-columns: 1fr;
+  }
+
+  .pipeline-analytics-grid > div:first-child {
+    grid-template-columns: 1fr;
+  }
+
+  .pipeline-summary-row {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
