@@ -7,6 +7,9 @@ import Content from './pages/Content';
 import Dashboard from './pages/Dashboard';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
+import Pipeline from './pages/Pipeline';
+import ProspectDetail from './pages/ProspectDetail';
+import Prospects from './pages/Prospects';
 import Register from './pages/Register';
 
 function App() {
@@ -21,6 +24,9 @@ function App() {
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/campaigns" element={<Campaigns />} />
           <Route path="/content" element={<Content />} />
+          <Route path="/prospects" element={<Prospects />} />
+          <Route path="/prospects/:id" element={<ProspectDetail />} />
+          <Route path="/pipeline" element={<Pipeline />} />
         </Routes>
       </Router>
     </AuthProvider>
