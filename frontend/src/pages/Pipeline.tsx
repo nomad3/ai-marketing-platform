@@ -1,6 +1,5 @@
 import {
   BarChart3,
-  Building2,
   GitBranch,
   LayoutDashboard,
   LogOut,
@@ -103,11 +102,6 @@ export default function Pipeline() {
 
   // Funnel metrics
   const total = prospects.length;
-  const stageConversions = STAGES.slice(0, -1).map((stage, i) => {
-    const current = getStageProspects(stage.key).length;
-    const next = getStageProspects(STAGES[i + 1]?.key).length;
-    return { from: stage.label, rate: current > 0 ? Math.round((next / current) * 100) : 0 };
-  });
 
   if (loading) {
     return <div className="dashboard-loading"><div className="spinner"></div><p>Loading pipeline...</p></div>;
