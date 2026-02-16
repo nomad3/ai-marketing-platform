@@ -34,7 +34,7 @@ export default function LandingPage() {
         <div className="container flex-between">
           <div className="logo">
             <Sparkles className="logo-icon" />
-            <span className="logo-text">AI Marketing Platform</span>
+            <span className="logo-text">HCA Deal Intelligence</span>
           </div>
           <div className="nav-links">
             <a href="#features">Features</a>
@@ -51,41 +51,41 @@ export default function LandingPage() {
           <div className="hero-content fade-in">
             <div className="badge mb-2">
               <Zap size={16} />
-              <span>Powered by Advanced AI</span>
+              <span>Signal-Based Deal Sourcing</span>
             </div>
             <h1 className="hero-title">
-              Transform Your Marketing
+              AI-Powered Deal Intelligence
               <br />
-              with <span className="gradient-text">AI-Powered Ads</span>
+              for <span className="gradient-text">Middle-Market M&A</span>
             </h1>
             <p className="hero-subtitle">
-              Create stunning ad campaigns, generate AI content, and track ROI across Meta, Google, and TikTok.
-              All from one powerful platform.
+              Discover companies likely to sell using AI signal analysis. Generate research briefs, score
+              sell-likelihood, and create personalized outreach — all from one platform.
             </p>
             <div className="hero-cta">
-              <a href="/register" className="btn btn-primary btn-large">
+              <a href="/login" className="btn btn-primary btn-large">
                 <Rocket size={20} />
-                Start Free Trial
+                Get Started
               </a>
-              <button className="btn btn-secondary btn-large">
+              <a href="/login" className="btn btn-secondary btn-large">
                 <Play size={20} />
-                Watch Demo
-              </button>
+                View Demo
+              </a>
             </div>
 
             {/* Stats */}
             <div className="hero-stats">
               <div className="stat">
-                <div className="stat-value">300%</div>
-                <div className="stat-label">Average ROI Increase</div>
+                <div className="stat-value">300+</div>
+                <div className="stat-label">Transactions Completed</div>
               </div>
               <div className="stat">
-                <div className="stat-value">10K+</div>
-                <div className="stat-label">Campaigns Created</div>
+                <div className="stat-value">5</div>
+                <div className="stat-label">Signal Categories</div>
               </div>
               <div className="stat">
-                <div className="stat-value">$50M+</div>
-                <div className="stat-label">Ad Spend Managed</div>
+                <div className="stat-value">$200M+</div>
+                <div className="stat-label">Deal Value Sourced</div>
               </div>
             </div>
           </div>

@@ -134,7 +134,7 @@ export default function Dashboard() {
       <aside className="dashboard-sidebar glass">
         <div className="sidebar-header">
           <Zap className="sidebar-logo" />
-          <span>AI Marketing</span>
+          <span>HCA Deal Intel</span>
         </div>
 
         <nav className="sidebar-nav">
