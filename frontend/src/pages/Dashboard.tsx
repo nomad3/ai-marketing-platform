@@ -3,11 +3,14 @@ import {
   BarChart3,
   DollarSign,
   Eye,
+  GitBranch,
   LayoutDashboard,
   LogOut,
   Plus,
+  Sparkles,
   Target,
   TrendingUp,
+  Users,
   Zap
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -48,6 +51,7 @@ export default function Dashboard() {
   const [showContentGenerator, setShowContentGenerator] = useState(false);
   const [showCampaignCreator, setShowCampaignCreator] = useState(false);
   const [showCampaignTemplates, setShowCampaignTemplates] = useState(false);
+  const [pipelineStats, setPipelineStats] = useState<any>(null);
 
   useEffect(() => {
     // Redirect to login if not authenticated
@@ -74,6 +78,15 @@ export default function Dashboard() {
       const analyticsRes = await fetch('/api/analytics/overview');
       const analyticsData = await analyticsRes.json();
       setAnalytics(analyticsData);
+
+      // Fetch pipeline stats
+      try {
+        const pipelineRes = await fetch('/api/analytics/pipeline');
+        const pipelineData = await pipelineRes.json();
+        setPipelineStats(pipelineData);
+      } catch (e) {
+        console.error('Failed to fetch pipeline stats:', e);
+      }
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
     } finally {
@@ -140,6 +153,18 @@ export default function Dashboard() {
           <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/content'); }}>
             <Zap size={20} />
             <span>AI Content</span>
+          </a>
+
+          <div style={{ padding: '1rem 1rem 0.5rem', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', fontWeight: 600 }}>
+            Deal Intelligence
+          </div>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/prospects'); }}>
+            <Users size={20} />
+            <span>Prospects</span>
+          </a>
+          <a href="#" className="nav-item" onClick={(e) => { e.preventDefault(); navigate('/pipeline'); }}>
+            <GitBranch size={20} />
+            <span>Pipeline</span>
           </a>
         </nav>
 
@@ -219,6 +244,50 @@ export default function Dashboard() {
             </button>
           </div>
         </div>
+
+        {/* Deal Intelligence Card */}
+        {pipelineStats && (
+          <div className="deal-intel-section">
+            <h2><Sparkles size={20} style={{ color: 'var(--primary)' }} /> Deal Intelligence</h2>
+            <div className="stats-grid">
+              <div className="stat-card card-gradient glass" onClick={() => navigate('/prospects')} style={{ cursor: 'pointer' }}>
+                <div className="stat-header">
+                  <span className="stat-label">Total Prospects</span>
+                  <Users className="stat-icon" style={{ color: '#667eea' }} />
+                </div>
+                <div className="stat-value">{pipelineStats.total_prospects}</div>
+                <div className="stat-change neutral"><span>In pipeline</span></div>
+              </div>
+
+              <div className="stat-card card-gradient glass" onClick={() => navigate('/prospects?score_min=70')} style={{ cursor: 'pointer' }}>
+                <div className="stat-header">
+                  <span className="stat-label">Hot Prospects</span>
+                  <TrendingUp className="stat-icon" style={{ color: '#00f2fe' }} />
+                </div>
+                <div className="stat-value">{pipelineStats.hot_prospects}</div>
+                <div className="stat-change positive"><span>Score 70+</span></div>
+              </div>
+
+              <div className="stat-card card-gradient glass" onClick={() => navigate('/pipeline')} style={{ cursor: 'pointer' }}>
+                <div className="stat-header">
+                  <span className="stat-label">Active Deals</span>
+                  <Target className="stat-icon" style={{ color: '#fee140' }} />
+                </div>
+                <div className="stat-value">{pipelineStats.active_deals}</div>
+                <div className="stat-change neutral"><span>In negotiation</span></div>
+              </div>
+
+              <div className="stat-card card-gradient glass">
+                <div className="stat-header">
+                  <span className="stat-label">Signals (7d)</span>
+                  <Sparkles className="stat-icon" style={{ color: '#f093fb' }} />
+                </div>
+                <div className="stat-value">{pipelineStats.recent_signals}</div>
+                <div className="stat-change neutral"><span>Recently detected</span></div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Stats Grid */}
         <div className="stats-grid">

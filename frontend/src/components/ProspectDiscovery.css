@@ -1,0 +1,222 @@
+/* AI Prospect Discovery Modal */
+
+.discovery-modal {
+  max-width: 900px;
+  width: 95%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.discovery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.discovery-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.discovery-icon {
+  color: var(--primary);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.discovery-title h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.discovery-title p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.close-btn:hover {
+  color: var(--text-primary);
+}
+
+/* Form */
+.discovery-form {
+  padding: var(--spacing-md);
+  overflow-y: auto;
+}
+
+.discovery-form .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.discover-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  font-size: 1rem;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+/* Results */
+.discovery-results {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.results-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.results-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-sm) var(--spacing-md);
+  max-height: 50vh;
+}
+
+.result-card {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.result-card:hover {
+  background: rgba(102, 126, 234, 0.05);
+  border-color: rgba(102, 126, 234, 0.2);
+}
+
+.result-card.selected {
+  background: rgba(102, 126, 234, 0.1);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.result-checkbox {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 0.2rem;
+  color: var(--primary);
+}
+
+.checkbox-empty {
+  width: 16px;
+  height: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.result-info {
+  flex: 1;
+}
+
+.result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.result-name {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.result-name svg {
+  color: var(--primary);
+  opacity: 0.7;
+}
+
+.result-score {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.result-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.result-signals {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.signal-chip {
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--primary);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.65rem;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.results-footer {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.results-footer .btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-sm {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .discovery-form .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .result-meta {
+    flex-wrap: wrap;
+  }
+}
