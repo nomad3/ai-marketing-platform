@@ -7,6 +7,7 @@ import campaignRoutes from './routes/campaigns.js';
 import contentRoutes from './routes/content.js';
 import reportsRoutes from './routes/reports.js';
 import prospectRoutes from './routes/prospects.js';
+import outreachRoutes from './routes/outreach.js';
 import { optionalAuth, authenticateToken } from './middleware/auth.js';
 import './db.js'; // Initialize database connection
 
@@ -34,6 +35,7 @@ app.use('/api/analytics', optionalAuth, analyticsRoutes); // Optional auth for n
 app.use('/api/content', optionalAuth, contentRoutes); // Optional auth for now
 app.use('/api/reports', optionalAuth, reportsRoutes); // Optional auth for now
 app.use('/api/prospects', optionalAuth, prospectRoutes);
+app.use('/api/outreach', optionalAuth, outreachRoutes);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
