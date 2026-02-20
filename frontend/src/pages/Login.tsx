@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Zap, Mail, Lock, ArrowRight, Sparkles, BarChart3, Target } from 'lucide-react';
+import './Login.css';
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +11,7 @@ const Login: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -19,7 +21,7 @@ const Login: React.FC = () => {
     setError('');
 
     const result = await login(formData.email, formData.password);
-    
+
     setLoading(false);
 
     if (result.success) {
@@ -37,58 +39,60 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
-      <div className="flex min-h-screen">
-        {/* Left side - Marketing copy */}
-        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-purple-700 p-12 text-white flex-col justify-center">
-          <div className="max-w-md">
-            <h1 className="text-4xl font-bold mb-6">
-              Welcome to AI Marketing Platform
-            </h1>
-            <p className="text-xl text-blue-100 mb-8">
-              Supercharge your marketing campaigns with AI-powered insights and automation.
-            </p>
-            <div className="space-y-4">
-              <div className="flex items-center">
-                <div className="w-2 h-2 bg-yellow-400 rounded-full mr-3"></div>
-                <span>AI-powered campaign optimization</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-2 h-2 bg-yellow-400 rounded-full mr-3"></div>
-                <span>Real-time analytics and reporting</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-2 h-2 bg-yellow-400 rounded-full mr-3"></div>
-                <span>Multi-platform campaign management</span>
-              </div>
+    <div className="login-page">
+      {/* Left side - Branding */}
+      <div className="login-hero">
+        <div className="login-hero-content">
+          <div className="login-brand">
+            <Zap className="login-brand-icon" />
+            <span>HCA Deal Intelligence</span>
+          </div>
+          <h1 className="login-hero-title">
+            AI-Powered Deal Sourcing for Middle-Market M&A
+          </h1>
+          <p className="login-hero-subtitle">
+            Discover companies likely to sell using AI signal analysis, generate research briefs, and create personalized outreach.
+          </p>
+          <div className="login-features">
+            <div className="login-feature">
+              <Sparkles size={20} />
+              <span>Signal-based prospect scoring</span>
+            </div>
+            <div className="login-feature">
+              <BarChart3 size={20} />
+              <span>Real-time pipeline analytics</span>
+            </div>
+            <div className="login-feature">
+              <Target size={20} />
+              <span>AI-powered outreach generation</span>
             </div>
           </div>
         </div>
+        <div className="login-hero-glow" />
+      </div>
 
-        {/* Right side - Login form */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-          <div className="w-full max-w-md">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">Sign in to your account</h2>
-              <p className="mt-2 text-gray-600">
-                Don't have an account?{' '}
-                <Link to="/register" className="text-blue-600 hover:text-blue-500 font-medium">
-                  Sign up here
-                </Link>
-              </p>
-            </div>
+      {/* Right side - Login form */}
+      <div className="login-form-section">
+        <div className="login-form-container">
+          <div className="login-form-header">
+            <h2>Welcome back</h2>
+            <p>
+              Don't have an account?{' '}
+              <Link to="/register" className="login-link">Sign up here</Link>
+            </p>
+          </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                  {error}
-                </div>
-              )}
+          <form onSubmit={handleSubmit} className="login-form">
+            {error && (
+              <div className="login-error">
+                {error}
+              </div>
+            )}
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email address
-                </label>
+            <div className="login-field">
+              <label htmlFor="email">Email address</label>
+              <div className="login-input-wrapper">
+                <Mail size={18} className="login-input-icon" />
                 <input
                   id="email"
                   name="email"
@@ -96,15 +100,15 @@ const Login: React.FC = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Enter your email"
                 />
               </div>
+            </div>
 
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
+            <div className="login-field">
+              <label htmlFor="password">Password</label>
+              <div className="login-input-wrapper">
+                <Lock size={18} className="login-input-icon" />
                 <input
                   id="password"
                   name="password"
@@ -112,52 +116,40 @@ const Login: React.FC = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Enter your password"
                 />
               </div>
+            </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                    Remember me
-                  </label>
-                </div>
+            <div className="login-options">
+              <label className="login-checkbox">
+                <input type="checkbox" name="remember-me" />
+                <span>Remember me</span>
+              </label>
+              <a href="#" className="login-link">Forgot password?</a>
+            </div>
 
-                <div className="text-sm">
-                  <a href="#" className="text-blue-600 hover:text-blue-500">
-                    Forgot your password?
-                  </a>
-                </div>
-              </div>
+            <button type="submit" className="login-submit" disabled={loading}>
+              {loading ? (
+                <>
+                  <div className="login-spinner" />
+                  Signing in...
+                </>
+              ) : (
+                <>
+                  Sign in
+                  <ArrowRight size={18} />
+                </>
+              )}
+            </button>
+          </form>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Signing in...
-                  </div>
-                ) : (
-                  'Sign in'
-                )}
-              </button>
-            </form>
-
-            {/* Demo credentials */}
-            <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600 font-medium mb-2">Demo Account:</p>
-              <p className="text-xs text-gray-500">Email: demo@ai.com</p>
-              <p className="text-xs text-gray-500">Password: demo123</p>
+          <div className="login-demo">
+            <span className="login-demo-label">Demo Account</span>
+            <div className="login-demo-creds">
+              <span>demo@ai.com</span>
+              <span className="login-demo-sep">/</span>
+              <span>demo123</span>
             </div>
           </div>
         </div>
