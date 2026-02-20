@@ -82,6 +82,7 @@ services:
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET=${JWT_SECRET:-your-secret-key-change-in-production}
       - MCP_SERVER_URL=http://mcp-server:3001
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     ports:
       - "3000:3000"
     volumes:
@@ -98,25 +99,18 @@ services:
       - marketing-network
     command: npm run dev
 
-  # Frontend
+  # Frontend (nginx serving built assets, proxying /api to backend)
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: marketing-platform-frontend
-    environment:
-      - VITE_API_URL=http://localhost:3000
-      - VITE_MCP_SERVER_URL=http://localhost:3001
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - "5173:80"
     depends_on:
       - backend
     networks:
       - marketing-network
-    command: npm run dev
 
 volumes:
   postgres_data:
