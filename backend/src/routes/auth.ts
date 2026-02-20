@@ -5,7 +5,7 @@ import { query } from '../db.js';
 
 const router = Router();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key_change_in_production';
+const JWT_SECRET = process.env.JWT_SECRET || '';
 
 // Register
 router.post('/register', async (req, res) => {

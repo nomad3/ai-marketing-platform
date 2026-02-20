@@ -59,8 +59,8 @@ router.post('/generate', async (req, res) => {
     let content;
 
     // Higgsfield API Credentials
-    const HIGGSFIELD_API_KEY_ID = process.env.HIGGSFIELD_API_KEY_ID || 'b6ee7a1e-edb8-4a34-9294-0407cb3353a1';
-    const HIGGSFIELD_API_KEY_SECRET = process.env.HIGGSFIELD_API_KEY_SECRET || 'ecdd39e43963d70428e0a7b0e34b93d6a141673ffaffbf86c8db1076aa215ce8';
+    const HIGGSFIELD_API_KEY_ID = process.env.HIGGSFIELD_API_KEY_ID || '';
+    const HIGGSFIELD_API_KEY_SECRET = process.env.HIGGSFIELD_API_KEY_SECRET || '';
     const HIGGSFIELD_BASE_URL = 'https://platform.higgsfield.ai';
 
     const getAuthHeader = () => ({

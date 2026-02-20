@@ -80,9 +80,9 @@ PORT=3000
 DATABASE_URL=postgresql://postgres:postgres@postgres:5432/marketing_platform
 REDIS_URL=redis://redis:6379
 
-# Higgsfield AI
-HIGGSFIELD_API_KEY_ID=b6ee7a1e-edb8-4a34-9294-0407cb3353a1
-HIGGSFIELD_API_KEY_SECRET=ecdd39e43963d70428e0a7b0e34b93d6a141673ffaffbf86c8db1076aa215ce8
+# Higgsfield AI (set via environment or secrets manager)
+HIGGSFIELD_API_KEY_ID=\${HIGGSFIELD_API_KEY_ID}
+HIGGSFIELD_API_KEY_SECRET=\${HIGGSFIELD_API_KEY_SECRET}
 
 # Add other API keys as needed
 META_APP_ID=

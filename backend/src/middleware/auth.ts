@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { query } from '../db.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key_change_in_production';
+const JWT_SECRET = process.env.JWT_SECRET || '';
 
 // Extend Express Request interface to include user
 declare global {
