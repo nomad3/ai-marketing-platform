@@ -19,6 +19,7 @@ import { useAuth } from '../context/AuthContext';
 import AICampaignBuilder from '../components/AICampaignBuilder';
 import ContentGenerator from '../components/ContentGenerator';
 import CampaignTemplates from '../components/CampaignTemplates';
+import ThemeToggle from '../components/ThemeToggle';
 import './Dashboard.css';
 
 interface Campaign {
@@ -177,8 +178,9 @@ export default function Dashboard() {
               <div className="user-name">{user?.name || 'User'}</div>
               <div className="user-email">{user?.email || ''}</div>
             </div>
-            <button 
-              className="logout-btn" 
+            <ThemeToggle />
+            <button
+              className="logout-btn"
               onClick={handleLogout}
               title="Logout"
             >

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Zap, User, Mail, Lock, Building2, ArrowRight, CheckCircle } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 import './Register.css';
 
 const Register: React.FC = () => {
@@ -60,6 +61,7 @@ const Register: React.FC = () => {
 
   return (
     <div className="register-page">
+      <ThemeToggle floating />
       {/* Left side - Branding */}
       <div className="register-hero">
         <div className="register-hero-content">

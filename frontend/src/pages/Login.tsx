@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Zap, Mail, Lock, ArrowRight, Sparkles, BarChart3, Target } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 import './Login.css';
 
 const Login: React.FC = () => {
@@ -40,6 +41,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="login-page">
+      <ThemeToggle floating />
       {/* Left side - Branding */}
       <div className="login-hero">
         <div className="login-hero-content">
