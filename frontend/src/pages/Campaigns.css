@@ -68,7 +68,7 @@
 .search-bar input {
   width: 100%;
   padding: 10px 10px 10px 40px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   color: var(--text-primary);
@@ -79,7 +79,7 @@
 .search-bar input:focus {
   outline: none;
   border-color: var(--primary);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-secondary);
 }
 
 .filters {
@@ -104,7 +104,7 @@
 
 .filter-group select {
   padding: 10px 10px 10px 36px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   color: var(--text-primary);
@@ -121,7 +121,7 @@
 
 .view-toggle {
   display: flex;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-tertiary);
   border-radius: var(--radius-md);
   padding: 2px;
   border: 1px solid var(--border-color);
@@ -174,7 +174,7 @@
 }
 
 .campaigns-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-card-hover);
 }
 
 .campaign-name-cell {
@@ -263,7 +263,7 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid rgba(102, 126, 234, 0.1);
+  border: 3px solid var(--border-color);
   border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;

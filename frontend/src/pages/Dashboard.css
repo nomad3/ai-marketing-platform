@@ -57,7 +57,7 @@
 }
 
 .nav-item:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--bg-tertiary);
   color: var(--text-primary);
 }
 
@@ -253,7 +253,7 @@
 
 .metric-bar {
   height: 6px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-tertiary);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -287,7 +287,7 @@
 }
 
 .campaigns-table thead {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--bg-tertiary);
 }
 
 .campaigns-table th {
@@ -312,7 +312,7 @@
 }
 
 .campaigns-table tbody tr:hover {
-  background: rgba(102, 126, 234, 0.05);
+  background: var(--bg-tertiary);
 }
 
 .campaign-name {
@@ -412,7 +412,7 @@
 }
 
 .btn-icon:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--bg-tertiary);
   border-color: var(--primary);
   color: var(--primary);
 }

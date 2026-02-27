@@ -25,7 +25,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="landing-page">
+    <div className="landing-page" data-theme="dark">
       {/* Animated Background */}
       <div className="animated-bg"></div>
 

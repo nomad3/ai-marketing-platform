@@ -2,7 +2,7 @@
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
-  color: white;
+  color: var(--text-primary);
 }
 
 .analytics-header {
@@ -16,13 +16,13 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .analytics-header p {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 1.1rem;
 }
 
@@ -38,7 +38,7 @@
   gap: 0.5rem;
   background: none;
   border: none;
-  color: #94a3b8;
+  color: var(--text-muted);
   cursor: pointer;
   font-size: 0.9rem;
   margin-bottom: 1rem;
@@ -47,13 +47,13 @@
 }
 
 .btn-back:hover {
-  color: white;
+  color: var(--text-primary);
 }
 
 .time-range-select {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   padding: 0.75rem 1rem;
   border-radius: 12px;
   cursor: pointer;
@@ -62,7 +62,7 @@
 }
 
 .time-range-select:focus {
-  border-color: #6366f1;
+  border-color: var(--primary);
 }
 
 /* Metrics Overview */
@@ -91,7 +91,7 @@
 }
 
 .metric-label {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
@@ -141,12 +141,12 @@
 }
 
 .performance-icon {
-  color: #6366f1;
+  color: var(--primary);
   margin-bottom: 0.25rem;
 }
 
 .performance-label {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 0.85rem;
 }
 
@@ -175,15 +175,15 @@ table {
 th {
   text-align: left;
   padding: 1rem;
-  color: #94a3b8;
+  color: var(--text-muted);
   font-weight: 500;
   font-size: 0.9rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-color);
 }
 
 td {
   padding: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-color);
   font-size: 0.95rem;
 }
 
@@ -193,7 +193,7 @@ tr:last-child td {
 
 .campaign-name {
   font-weight: 500;
-  color: white;
+  color: var(--text-primary);
 }
 
 .platform-badge {
@@ -214,8 +214,8 @@ tr:last-child td {
 }
 
 .platform-tiktok {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: rgba(254, 44, 85, 0.2);
+  color: #fe2c55;
 }
 
 .platform-linkedin {
@@ -241,16 +241,16 @@ tr:last-child td {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  color: #94a3b8;
+  color: var(--text-muted);
   gap: 1rem;
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid var(--border-color);
   border-radius: 50%;
-  border-top-color: #6366f1;
+  border-top-color: var(--primary);
   animation: spin 1s linear infinite;
 }
 
@@ -278,8 +278,8 @@ tr:last-child td {
 .tab {
   padding: 0.75rem 1.5rem;
   border: none;
-  background: rgba(255, 255, 255, 0.05);
-  color: #94a3b8;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
@@ -287,8 +287,8 @@ tr:last-child td {
 }
 
 .tab:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
 }
 
 .tab.active {
@@ -311,21 +311,21 @@ tr:last-child td {
 .chart-container h3 {
   font-size: 1.25rem;
   margin-bottom: 1.5rem;
-  color: white;
+  color: var(--text-primary);
 }
 
 /* Custom Tooltip */
 .custom-tooltip {
   padding: 1rem;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
   font-size: 0.9rem;
 }
 
 .tooltip-label {
   font-weight: 500;
   margin-bottom: 0.5rem;
-  color: white;
+  color: var(--text-primary);
 }
 
 /* Platform Performance */
@@ -352,7 +352,7 @@ tr:last-child td {
 .platform-chart h3 {
   font-size: 1.1rem;
   margin-bottom: 1rem;
-  color: white;
+  color: var(--text-primary);
 }
 
 /* Performance Trends */
@@ -414,7 +414,7 @@ tr:last-child td {
 
 .test-type {
   font-size: 0.75rem;
-  color: #6366f1;
+  color: var(--primary);
   font-weight: 500;
 }
 
@@ -455,7 +455,7 @@ tr:last-child td {
 
 .test-metrics .metric-label {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .test-metrics .metric-value {
@@ -468,7 +468,7 @@ tr:last-child td {
   justify-content: space-between;
   align-items: center;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
 }
 
 .winner-badge {
@@ -481,7 +481,7 @@ tr:last-child td {
 }
 
 .winner-badge.challenger {
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .lift-value {
@@ -505,9 +505,9 @@ tr:last-child td {
 }
 
 .platform-filter {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -555,7 +555,7 @@ tr:last-child td {
 .btn-icon {
   background: none;
   border: none;
-  color: #94a3b8;
+  color: var(--text-muted);
   cursor: pointer;
   font-size: 1rem;
   padding: 0.25rem;
@@ -565,8 +565,8 @@ tr:last-child td {
 }
 
 .btn-icon:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
 }
 
 /* Pipeline Analytics Tab */
@@ -579,7 +579,7 @@ tr:last-child td {
 .pipeline-analytics-grid h4 {
   font-size: 1rem;
   margin-bottom: 0.75rem;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .pipeline-analytics-grid > div:first-child {
@@ -607,7 +607,7 @@ tr:last-child td {
 .pipeline-metric-label {
   display: block;
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--text-muted);
   margin-bottom: 0.5rem;
 }
 
@@ -630,10 +630,10 @@ tr:last-child td {
 .signal-table th {
   text-align: left;
   padding: 0.75rem 1rem;
-  color: #94a3b8;
+  color: var(--text-muted);
   font-weight: 500;
   font-size: 0.8rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-color);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -641,7 +641,7 @@ tr:last-child td {
 .signal-table td {
   padding: 0.6rem 1rem;
   font-size: 0.85rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-color);
   text-transform: capitalize;
 }
 

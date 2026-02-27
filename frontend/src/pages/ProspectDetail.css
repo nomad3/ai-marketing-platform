@@ -27,8 +27,8 @@
 }
 
 .btn-back {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
   color: var(--text-primary);
   padding: 0.5rem;
   border-radius: var(--radius-sm);
@@ -37,7 +37,7 @@
 }
 
 .btn-back:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-card-hover);
 }
 
 .prospect-header-actions {
@@ -48,8 +48,8 @@
 }
 
 .stage-select, .outreach-select {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
   color: var(--text-primary);
   padding: 0.5rem 0.75rem;
   border-radius: var(--radius-sm);
@@ -213,7 +213,7 @@
 .detail-tabs {
   display: flex;
   gap: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .tab {
@@ -242,7 +242,7 @@
 /* Research Sections */
 .research-section {
   padding: var(--spacing-sm) 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .research-section:last-child {
@@ -296,7 +296,7 @@
   flex-wrap: wrap;
   font-size: 0.85rem;
   padding: 0.5rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-tertiary);
   border-radius: var(--radius-sm);
 }
 
@@ -352,9 +352,9 @@
 
 .outreach-item {
   padding: var(--spacing-sm);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-tertiary);
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
 }
 
 .outreach-item-header {
@@ -404,8 +404,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 0.5rem 0.75rem;
 }
@@ -433,7 +433,7 @@
   display: flex;
   gap: 0.75rem;
   padding: 0.75rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .activity-dot {
@@ -521,7 +521,7 @@
 .breakdown-bar {
   flex: 1;
   height: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-tertiary);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -553,12 +553,12 @@
   color: var(--text-secondary);
   margin-bottom: 0.5rem;
   padding-bottom: 0.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .signal-count {
   margin-left: auto;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-tertiary);
   padding: 0.1rem 0.4rem;
   border-radius: var(--radius-full);
   font-size: 0.65rem;
@@ -568,7 +568,7 @@
   padding: 0.5rem;
   margin-bottom: 0.4rem;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-tertiary);
 }
 
 .signal-negative {
@@ -590,7 +590,7 @@
 .strength-bar {
   flex: 1;
   height: 3px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-tertiary);
   border-radius: 2px;
   overflow: hidden;
 }

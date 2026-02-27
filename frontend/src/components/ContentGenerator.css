@@ -56,7 +56,7 @@
 }
 
 .btn-close:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-tertiary);
   color: var(--text-primary);
 }
 
