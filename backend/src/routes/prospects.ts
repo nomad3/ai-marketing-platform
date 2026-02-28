@@ -3,6 +3,7 @@ import { query } from '../db.js';
 import { scoreProspect } from '../services/signal-scorer.js';
 import { generateResearchBrief } from '../services/research-generator.js';
 import { discoverProspects, saveDiscoveredProspects } from '../services/prospect-discovery.js';
+import { emitWebhook } from '../services/webhook-emitter.js';
 
 const router = Router();
 
@@ -129,6 +130,13 @@ router.post('/', async (req, res) => {
       INSERT INTO prospect_activities (prospect_id, user_id, activity_type, title)
       VALUES ($1, $2, 'created', 'Prospect added to pipeline')
     `, [result.rows[0].id, userId]);
+
+    emitWebhook('prospect.created', {
+      prospect_id: result.rows[0].id,
+      company_name: result.rows[0].company_name,
+      industry: result.rows[0].industry,
+      source: result.rows[0].source || 'manual',
+    });
 
     res.status(201).json({ prospect: result.rows[0] });
   } catch (error) {
@@ -310,6 +318,13 @@ router.put('/:id/stage', async (req, res) => {
       VALUES ($1, $2, 'stage_change', $3, $4)
     `, [id, userId, `Stage changed from ${previousStage} to ${stage}`, JSON.stringify({ stage_from: previousStage, stage_to: stage })]);
 
+    emitWebhook('prospect.stage_changed', {
+      prospect_id: req.params.id,
+      old_stage: previousStage,
+      new_stage: stage,
+      company_name: result.rows[0].company_name,
+    });
+
     res.json({ prospect: result.rows[0] });
   } catch (error) {
     console.error('Error changing prospect stage:', error);
@@ -379,6 +394,11 @@ router.post('/:id/research', async (req, res) => {
     // Return updated prospect
     const prospectResult = await query(`SELECT * FROM prospects WHERE id = $1`, [id]);
 
+    emitWebhook('prospect.research_completed', {
+      prospect_id: req.params.id,
+      company_name: prospectResult.rows[0].company_name,
+    });
+
     res.json({
       prospect: prospectResult.rows[0],
       research: brief,
@@ -405,6 +425,12 @@ router.post('/:id/score', async (req, res) => {
     // Return updated prospect with signals
     const prospectResult = await query(`SELECT * FROM prospects WHERE id = $1`, [id]);
     const signalsResult = await query(`SELECT * FROM prospect_signals WHERE prospect_id = $1 AND is_active = true ORDER BY signal_strength DESC`, [id]);
+
+    emitWebhook('prospect.scored', {
+      prospect_id: req.params.id,
+      score: result.score,
+      company_name: prospectResult.rows[0].company_name,
+    });
 
     res.json({
       prospect: prospectResult.rows[0],
