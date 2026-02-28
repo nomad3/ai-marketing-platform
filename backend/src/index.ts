@@ -8,7 +8,9 @@ import contentRoutes from './routes/content.js';
 import reportsRoutes from './routes/reports.js';
 import prospectRoutes from './routes/prospects.js';
 import outreachRoutes from './routes/outreach.js';
+import integrationRoutes from './routes/integration.js';
 import { optionalAuth, authenticateToken } from './middleware/auth.js';
+import { authenticateService } from './middleware/serviceAuth.js';
 import './db.js'; // Initialize database connection
 
 dotenv.config();
@@ -20,6 +22,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public')); // Serve static files from public directory
+app.use(authenticateService);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -36,6 +39,7 @@ app.use('/api/content', optionalAuth, contentRoutes); // Optional auth for now
 app.use('/api/reports', optionalAuth, reportsRoutes); // Optional auth for now
 app.use('/api/prospects', optionalAuth, prospectRoutes);
 app.use('/api/outreach', optionalAuth, outreachRoutes);
+app.use('/api/integration', integrationRoutes);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
