@@ -154,12 +154,12 @@
   font-weight: 500;
 }
 
-.stage-lead { background: rgba(184, 193, 236, 0.2); color: #b8c1ec; }
-.stage-contacted { background: rgba(102, 126, 234, 0.2); color: #667eea; }
-.stage-engaged { background: rgba(0, 242, 254, 0.2); color: #00f2fe; }
-.stage-active_deal { background: rgba(254, 225, 64, 0.2); color: #fee140; }
-.stage-closed_won { background: rgba(72, 199, 142, 0.2); color: #48c78e; }
-.stage-closed_lost { background: rgba(245, 87, 108, 0.2); color: #f5576c; }
+.stage-lead { background: var(--primary-20); color: var(--text-secondary); }
+.stage-contacted { background: var(--primary-20); color: var(--primary); }
+.stage-engaged { background: var(--success-20); color: var(--success); }
+.stage-active_deal { background: var(--accent-20); color: var(--accent); }
+.stage-closed_won { background: var(--positive-20); color: var(--color-positive-bright); }
+.stage-closed_lost { background: var(--secondary-20); color: var(--secondary); }
 
 /* Industry Badges */
 .industry-badge {
@@ -170,10 +170,10 @@
   text-transform: capitalize;
 }
 
-.industry-healthcare { background: rgba(0, 242, 254, 0.15); color: #00f2fe; }
-.industry-consumer { background: rgba(240, 147, 251, 0.15); color: #f093fb; }
-.industry-industrial { background: rgba(254, 225, 64, 0.15); color: #fee140; }
-.industry-business_services { background: rgba(102, 126, 234, 0.15); color: #667eea; }
+.industry-healthcare { background: var(--success-15); color: var(--success); }
+.industry-consumer { background: var(--pink-15); color: var(--pink); }
+.industry-industrial { background: var(--accent-15); color: var(--accent); }
+.industry-business_services { background: var(--primary-15); color: var(--primary); }
 
 /* Source Badges */
 .source-badge {
@@ -184,9 +184,9 @@
   text-transform: capitalize;
 }
 
-.source-ai_discovery { background: rgba(102, 126, 234, 0.2); color: #667eea; }
-.source-manual { background: rgba(184, 193, 236, 0.15); color: #b8c1ec; }
-.source-campaign { background: rgba(0, 242, 254, 0.15); color: #00f2fe; }
+.source-ai_discovery { background: var(--primary-20); color: var(--primary); }
+.source-manual { background: var(--primary-15); color: var(--text-secondary); }
+.source-campaign { background: var(--success-15); color: var(--success); }
 
 /* Empty State */
 .empty-state {
@@ -214,7 +214,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--bg-overlay);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -266,7 +266,7 @@
 .form-group select:focus {
   border-color: var(--primary);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: var(--focus-ring);
 }
 
 .form-actions {

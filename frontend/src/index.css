@@ -14,6 +14,63 @@
   --secondary: #f5576c;
   --accent: #fee140;
   --success: #00f2fe;
+  --indigo: #6366f1;
+  --indigo-light: #8b5cf6;
+
+  /* Semantic Status Colors */
+  --color-positive: #10b981;
+  --color-positive-bright: #22c55e;
+  --color-negative: #ef4444;
+  --color-warning: #f59e0b;
+  --color-neutral: #9ca3af;
+  --color-info: #6366f1;
+
+  /* Primary Transparencies */
+  --primary-5: rgba(102, 126, 234, 0.05);
+  --primary-6: rgba(102, 126, 234, 0.06);
+  --primary-8: rgba(102, 126, 234, 0.08);
+  --primary-10: rgba(102, 126, 234, 0.1);
+  --primary-15: rgba(102, 126, 234, 0.15);
+  --primary-20: rgba(102, 126, 234, 0.2);
+  --primary-25: rgba(102, 126, 234, 0.25);
+  --primary-30: rgba(102, 126, 234, 0.3);
+  --primary-40: rgba(102, 126, 234, 0.4);
+
+  /* Secondary (Error) Transparencies */
+  --secondary-10: rgba(245, 87, 108, 0.1);
+  --secondary-20: rgba(245, 87, 108, 0.2);
+  --secondary-30: rgba(245, 87, 108, 0.3);
+
+  /* Success/Cyan Transparencies */
+  --success-10: rgba(0, 242, 254, 0.1);
+  --success-15: rgba(0, 242, 254, 0.15);
+  --success-20: rgba(0, 242, 254, 0.2);
+  --success-30: rgba(0, 242, 254, 0.3);
+
+  /* Accent/Yellow Transparencies */
+  --accent-15: rgba(254, 225, 64, 0.15);
+  --accent-20: rgba(254, 225, 64, 0.2);
+  --accent-30: rgba(254, 225, 64, 0.3);
+
+  /* Status Transparencies */
+  --positive-20: rgba(34, 197, 94, 0.2);
+  --negative-20: rgba(245, 87, 108, 0.2);
+  --warning-20: rgba(245, 158, 11, 0.2);
+  --neutral-20: rgba(156, 163, 175, 0.2);
+  --info-20: rgba(99, 102, 241, 0.2);
+
+  /* Pink Transparencies */
+  --pink: #f093fb;
+  --pink-15: rgba(240, 147, 251, 0.15);
+
+  /* Overlay */
+  --bg-overlay: rgba(0, 0, 0, 0.7);
+
+  /* Focus Ring */
+  --focus-ring: 0 0 0 3px var(--primary-10);
+
+  /* Indigo Gradient (tabs, buttons) */
+  --indigo-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
 
   /* Neutrals - Light Theme (default) */
   --bg-primary: #f5f7fa;
@@ -204,7 +261,7 @@ p {
 
 .btn-secondary:hover {
   border-color: var(--border-hover);
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--primary-10);
 }
 
 .btn-large {
@@ -372,21 +429,21 @@ p {
   font-size: 0.875rem;
   font-weight: 600;
   border-radius: var(--radius-full);
-  background: rgba(102, 126, 234, 0.15);
+  background: var(--primary-15);
   color: var(--primary);
-  border: 1px solid rgba(102, 126, 234, 0.25);
+  border: 1px solid var(--primary-25);
 }
 
 .badge-success {
-  background: rgba(0, 242, 254, 0.2);
+  background: var(--success-20);
   color: var(--success);
-  border-color: rgba(0, 242, 254, 0.3);
+  border-color: var(--success-30);
 }
 
 .badge-warning {
-  background: rgba(254, 225, 64, 0.2);
+  background: var(--accent-20);
   color: var(--accent);
-  border-color: rgba(254, 225, 64, 0.3);
+  border-color: var(--accent-30);
 }
 
 /* Input Fields */
@@ -404,7 +461,7 @@ p {
 .input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: var(--focus-ring);
 }
 
 /* Responsive */

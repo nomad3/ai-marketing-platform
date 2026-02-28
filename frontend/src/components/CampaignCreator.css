@@ -62,7 +62,7 @@
   outline: none;
   border-color: var(--primary);
   background: var(--bg-tertiary);
-  box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.1);
+  box-shadow: 0 0 0 3px var(--success-10);
 }
 
 .form-group input::placeholder,
@@ -101,10 +101,10 @@
 
 .error-message {
   padding: 1rem;
-  background: rgba(245, 87, 108, 0.1);
-  border: 1px solid rgba(245, 87, 108, 0.3);
+  background: var(--secondary-10);
+  border: 1px solid var(--secondary-30);
   border-radius: 8px;
-  color: #f5576c;
+  color: var(--secondary);
   font-size: 0.9rem;
 }
 

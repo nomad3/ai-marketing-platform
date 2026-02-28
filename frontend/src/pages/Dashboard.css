@@ -327,7 +327,7 @@
   width: 32px;
   height: 32px;
   border-radius: var(--radius-sm);
-  background: rgba(102, 126, 234, 0.2);
+  background: var(--primary-20);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -371,15 +371,15 @@
 }
 
 .status-active {
-  background: rgba(0, 242, 254, 0.2);
+  background: var(--success-20);
   color: var(--success);
-  border: 1px solid rgba(0, 242, 254, 0.3);
+  border: 1px solid var(--success-30);
 }
 
 .status-paused {
-  background: rgba(254, 225, 64, 0.2);
+  background: var(--accent-20);
   color: var(--accent);
-  border: 1px solid rgba(254, 225, 64, 0.3);
+  border: 1px solid var(--accent-30);
 }
 
 .status-draft {

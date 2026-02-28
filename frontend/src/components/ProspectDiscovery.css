@@ -119,13 +119,13 @@
 }
 
 .result-card:hover {
-  background: rgba(102, 126, 234, 0.05);
-  border-color: rgba(102, 126, 234, 0.2);
+  background: var(--primary-5);
+  border-color: var(--primary-20);
 }
 
 .result-card.selected {
-  background: rgba(102, 126, 234, 0.1);
-  border-color: rgba(102, 126, 234, 0.3);
+  background: var(--primary-10);
+  border-color: var(--primary-30);
 }
 
 .result-checkbox {
@@ -186,12 +186,12 @@
 }
 
 .signal-chip {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--primary-10);
   color: var(--primary);
   padding: 0.15rem 0.5rem;
   border-radius: var(--radius-full);
   font-size: 0.65rem;
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  border: 1px solid var(--primary-20);
 }
 
 .results-footer {

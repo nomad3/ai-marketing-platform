@@ -168,8 +168,8 @@
 
 .progress-tag {
   padding: 0.5rem 1rem;
-  background: rgba(0, 242, 254, 0.1);
-  border: 1px solid rgba(0, 242, 254, 0.3);
+  background: var(--success-10);
+  border: 1px solid var(--success-30);
   border-radius: 20px;
   font-size: 0.85rem;
   color: var(--primary);
@@ -199,7 +199,7 @@
   outline: none;
   border-color: var(--primary);
   background: var(--bg-tertiary);
-  box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.1);
+  box-shadow: 0 0 0 3px var(--success-10);
 }
 
 .input-wrapper textarea::placeholder {
@@ -223,7 +223,7 @@
 
 .send-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 242, 254, 0.3);
+  box-shadow: 0 8px 20px var(--success-30);
 }
 
 .send-button:disabled {

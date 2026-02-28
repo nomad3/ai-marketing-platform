@@ -305,7 +305,7 @@
 .comp-acquirer { color: var(--text-secondary); }
 .comp-multiple {
   margin-left: auto;
-  background: rgba(102, 126, 234, 0.15);
+  background: var(--primary-15);
   color: var(--primary);
   padding: 0.15rem 0.5rem;
   border-radius: var(--radius-full);
@@ -315,8 +315,8 @@
 
 .approach-badge {
   display: inline-block;
-  background: rgba(0, 242, 254, 0.15);
-  color: #00f2fe;
+  background: var(--success-15);
+  color: var(--success);
   padding: 0.25rem 0.75rem;
   border-radius: var(--radius-full);
   font-size: 0.8rem;
@@ -372,10 +372,10 @@
   text-transform: capitalize;
 }
 
-.type-cold_email { background: rgba(102, 126, 234, 0.2); color: #667eea; }
-.type-follow_up { background: rgba(0, 242, 254, 0.2); color: #00f2fe; }
+.type-cold_email { background: var(--primary-20); color: var(--primary); }
+.type-follow_up { background: var(--success-20); color: var(--success); }
 .type-linkedin_message { background: rgba(10, 102, 194, 0.2); color: #0a66c2; }
-.type-intro_one_pager { background: rgba(254, 225, 64, 0.2); color: #fee140; }
+.type-intro_one_pager { background: var(--accent-20); color: var(--accent); }
 
 .outreach-status { font-size: 0.7rem; color: var(--text-muted); }
 .outreach-date { font-size: 0.7rem; color: var(--text-muted); margin-left: auto; }
@@ -572,7 +572,7 @@
 }
 
 .signal-negative {
-  border-left: 2px solid #f5576c;
+  border-left: 2px solid var(--secondary);
 }
 
 .signal-description {
