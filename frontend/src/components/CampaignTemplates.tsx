@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { 
-  Target, 
-  TrendingUp, 
+import {
+  Target,
   ArrowRight,
   Sparkles,
   X,
-  Star,
   Zap
 } from 'lucide-react';
 import './CampaignTemplates.css';
@@ -29,12 +27,6 @@ interface CampaignTemplate {
     locations: string[];
     behaviors: string[];
   };
-  expectedResults: {
-    ctr: number;
-    conversionRate: number;
-    roi: number;
-    timeline: string;
-  };
   adCopy: {
     headline: string;
     body: string;
@@ -42,8 +34,6 @@ interface CampaignTemplate {
   };
   icon: string;
   tags: string[];
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  popularity: number;
 }
 
 interface CampaignTemplatesProps {
@@ -73,21 +63,13 @@ export default function CampaignTemplates({ isOpen, onClose, onSelectTemplate }:
         locations: ['United States', 'Canada', 'United Kingdom'],
         behaviors: ['frequent online shoppers', 'high-value customers']
       },
-      expectedResults: {
-        ctr: 2.8,
-        conversionRate: 4.2,
-        roi: 320,
-        timeline: '2-3 weeks'
-      },
       adCopy: {
         headline: 'Discover Products You\'ll Love - Limited Time Offer!',
         body: 'Join thousands of satisfied customers who found exactly what they were looking for.',
         cta: 'Shop Now - 25% Off'
       },
       icon: '🛍️',
-      tags: ['High ROI', 'Proven Results', 'Best Seller'],
-      difficulty: 'Beginner',
-      popularity: 95
+      tags: ['E-commerce', 'Conversions']
     },
     {
       id: 'lead-gen-b2b',
@@ -104,21 +86,13 @@ export default function CampaignTemplates({ isOpen, onClose, onSelectTemplate }:
         locations: ['United States', 'Canada', 'United Kingdom', 'Australia'],
         behaviors: ['business professionals', 'decision makers', 'company executives']
       },
-      expectedResults: {
-        ctr: 3.5,
-        conversionRate: 8.1,
-        roi: 450,
-        timeline: '3-4 weeks'
-      },
       adCopy: {
         headline: 'Transform Your Business Operations Today',
         body: 'Join 1000+ companies that improved efficiency by 40% with our solution.',
         cta: 'Get Free Consultation'
       },
       icon: '🏢',
-      tags: ['B2B Expert', 'High Value', 'Professional'],
-      difficulty: 'Intermediate',
-      popularity: 88
+      tags: ['B2B', 'Lead Generation']
     },
     {
       id: 'brand-awareness-viral',
@@ -135,21 +109,13 @@ export default function CampaignTemplates({ isOpen, onClose, onSelectTemplate }:
         locations: ['United States', 'United Kingdom', 'Canada', 'Australia'],
         behaviors: ['social media enthusiasts', 'content creators', 'trend followers']
       },
-      expectedResults: {
-        ctr: 5.2,
-        conversionRate: 2.1,
-        roi: 180,
-        timeline: '1-2 weeks'
-      },
       adCopy: {
         headline: 'The Story Everyone\'s Talking About',
         body: 'Be part of the movement that\'s changing how people think about [your industry].',
         cta: 'Join the Conversation'
       },
       icon: '🚀',
-      tags: ['Trending', 'Creative', 'Viral Potential'],
-      difficulty: 'Advanced',
-      popularity: 76
+      tags: ['Brand', 'Awareness']
     },
     {
       id: 'app-install-mobile',
@@ -166,21 +132,13 @@ export default function CampaignTemplates({ isOpen, onClose, onSelectTemplate }:
         locations: ['United States', 'Canada', 'United Kingdom'],
         behaviors: ['mobile app users', 'early adopters', 'tech enthusiasts']
       },
-      expectedResults: {
-        ctr: 4.1,
-        conversionRate: 15.3,
-        roi: 280,
-        timeline: '2-3 weeks'
-      },
       adCopy: {
         headline: 'The App That Changes Everything',
         body: 'Join over 50,000 users who already transformed their daily routine.',
         cta: 'Download Free'
       },
       icon: '📱',
-      tags: ['Mobile First', 'High Install Rate', 'User Friendly'],
-      difficulty: 'Intermediate',
-      popularity: 82
+      tags: ['Mobile', 'App Installs']
     },
     {
       id: 'local-business-boost',
@@ -197,21 +155,13 @@ export default function CampaignTemplates({ isOpen, onClose, onSelectTemplate }:
         locations: ['Local area within 25 miles'],
         behaviors: ['local shoppers', 'community members', 'frequent local visitors']
       },
-      expectedResults: {
-        ctr: 3.8,
-        conversionRate: 6.5,
-        roi: 240,
-        timeline: '2-4 weeks'
-      },
       adCopy: {
         headline: 'Your Neighborhood\'s Best Kept Secret',
         body: 'Discover why locals choose us for quality service and unbeatable prices.',
         cta: 'Visit Us Today'
       },
       icon: '🏪',
-      tags: ['Local Focus', 'Community Driven', 'Affordable'],
-      difficulty: 'Beginner',
-      popularity: 71
+      tags: ['Local', 'Awareness']
     },
     {
       id: 'retargeting-recovery',
@@ -228,21 +178,13 @@ export default function CampaignTemplates({ isOpen, onClose, onSelectTemplate }:
         locations: ['United States', 'Canada', 'United Kingdom'],
         behaviors: ['abandoned cart', 'product interest', 'price conscious']
       },
-      expectedResults: {
-        ctr: 6.2,
-        conversionRate: 12.8,
-        roi: 520,
-        timeline: '1-2 weeks'
-      },
       adCopy: {
         headline: 'Still Thinking About It? Here\'s 20% Off',
         body: 'Complete your purchase now and save on the items you love.',
         cta: 'Complete Purchase'
       },
       icon: '🛒',
-      tags: ['High ROI', 'Quick Results', 'Conversion Pro'],
-      difficulty: 'Intermediate',
-      popularity: 91
+      tags: ['Retargeting', 'E-commerce']
     }
   ];
 
@@ -273,15 +215,6 @@ export default function CampaignTemplates({ isOpen, onClose, onSelectTemplate }:
     
     return matchesCategory && matchesPlatform && matchesSearch;
   });
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'Beginner': return '#22c55e';
-      case 'Intermediate': return '#f59e0b';
-      case 'Advanced': return '#ef4444';
-      default: return '#6b7280';
-    }
-  };
 
   const handleSelectTemplate = (template: CampaignTemplate) => {
     onSelectTemplate(template);
@@ -357,20 +290,6 @@ export default function CampaignTemplates({ isOpen, onClose, onSelectTemplate }:
                 <div className="template-meta">
                   <div className="template-title">
                     <h3>{template.name}</h3>
-                    <div className="template-badges">
-                      <span 
-                        className="difficulty-badge"
-                        style={{ backgroundColor: getDifficultyColor(template.difficulty) }}
-                      >
-                        {template.difficulty}
-                      </span>
-                      {template.popularity >= 90 && (
-                        <span className="popularity-badge">
-                          <Star size={12} />
-                          Popular
-                        </span>
-                      )}
-                    </div>
                   </div>
                   <p className="template-description">{template.description}</p>
                 </div>
@@ -385,17 +304,6 @@ export default function CampaignTemplates({ isOpen, onClose, onSelectTemplate }:
                   <div className="detail-item">
                     <span className="detail-label">Duration</span>
                     <span className="detail-value">{template.duration}</span>
-                  </div>
-                </div>
-
-                <div className="detail-row">
-                  <div className="detail-item">
-                    <span className="detail-label">Expected ROI</span>
-                    <span className="detail-value roi-positive">{template.expectedResults.roi}%</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="detail-label">Timeline</span>
-                    <span className="detail-value">{template.expectedResults.timeline}</span>
                   </div>
                 </div>
 
@@ -443,16 +351,6 @@ export default function CampaignTemplates({ isOpen, onClose, onSelectTemplate }:
                   Use This Template
                   <ArrowRight size={16} />
                 </button>
-                <div className="template-metrics">
-                  <span className="metric">
-                    <TrendingUp size={14} />
-                    {template.expectedResults.ctr}% CTR
-                  </span>
-                  <span className="metric">
-                    <Target size={14} />
-                    {template.expectedResults.conversionRate}% CR
-                  </span>
-                </div>
               </div>
             </div>
           ))}

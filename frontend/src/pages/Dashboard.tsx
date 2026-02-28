@@ -1,5 +1,4 @@
 import {
-  ArrowUpRight,
   BarChart3,
   DollarSign,
   Eye,
@@ -299,10 +298,6 @@ export default function Dashboard() {
               <DollarSign className="stat-icon" style={{ color: '#00f2fe' }} />
             </div>
             <div className="stat-value">${analytics?.totalRevenue.toLocaleString()}</div>
-            <div className="stat-change positive">
-              <ArrowUpRight size={16} />
-              <span>+12.5% from last month</span>
-            </div>
           </div>
 
           <div className="stat-card card-gradient glass">
@@ -311,10 +306,6 @@ export default function Dashboard() {
               <TrendingUp className="stat-icon" style={{ color: '#667eea' }} />
             </div>
             <div className="stat-value">{analytics?.averageROI}%</div>
-            <div className="stat-change positive">
-              <ArrowUpRight size={16} />
-              <span>+8.3% from last month</span>
-            </div>
           </div>
 
           <div className="stat-card card-gradient glass">
@@ -323,10 +314,6 @@ export default function Dashboard() {
               <Eye className="stat-icon" style={{ color: '#f5576c' }} />
             </div>
             <div className="stat-value">{(analytics?.totalImpressions || 0).toLocaleString()}</div>
-            <div className="stat-change positive">
-              <ArrowUpRight size={16} />
-              <span>+23.1% from last month</span>
-            </div>
           </div>
 
           <div className="stat-card card-gradient glass">
@@ -335,9 +322,6 @@ export default function Dashboard() {
               <Target className="stat-icon" style={{ color: '#fee140' }} />
             </div>
             <div className="stat-value">{analytics?.activeCampaigns}</div>
-            <div className="stat-change neutral">
-              <span>2 pending approval</span>
-            </div>
           </div>
         </div>
 

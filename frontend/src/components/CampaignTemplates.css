@@ -219,34 +219,6 @@
   color: var(--text-primary);
 }
 
-.template-badges {
-  display: flex;
-  gap: var(--spacing-xs);
-  align-items: center;
-}
-
-.difficulty-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-.popularity-badge {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.5rem;
-  background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
-  color: white;
-  border-radius: var(--radius-sm);
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
 .template-description {
   margin: 0;
   color: var(--text-secondary);
@@ -289,10 +261,6 @@
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
-}
-
-.detail-value.roi-positive {
-  color: var(--success);
 }
 
 .platform-support {
@@ -405,20 +373,6 @@
   font-weight: 600;
 }
 
-.template-metrics {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: center;
-}
-
-.metric {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
 /* No Templates State */
 .no-templates {
   display: flex;
@@ -521,10 +475,6 @@
     justify-content: center;
   }
   
-  .template-metrics {
-    flex-direction: column;
-    gap: var(--spacing-xs);
-  }
 }
 
 @media (max-width: 480px) {

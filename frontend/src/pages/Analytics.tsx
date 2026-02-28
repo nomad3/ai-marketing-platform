@@ -108,22 +108,6 @@ interface PlatformPerformance {
   color: string;
 }
 
-interface ABTestResult {
-  id: string;
-  campaignName: string;
-  testType: 'creative' | 'audience' | 'bidding' | 'placement';
-  variant: 'A' | 'B';
-  impressions: number;
-  clicks: number;
-  conversions: number;
-  conversionRate: number;
-  costPerConversion: number;
-  significance: number;
-  status: 'running' | 'completed' | 'planning';
-  winner?: 'A' | 'B' | 'inconclusive';
-  lift?: number;
-}
-
 export default function Analytics() {
   const navigate = useNavigate();
   const { user, logout, isAuthenticated } = useAuth();
@@ -131,7 +115,6 @@ export default function Analytics() {
   const [campaigns, setCampaigns] = useState<CampaignPerformance[]>([]);
   const [timeSeriesData, setTimeSeriesData] = useState<TimeSeriesData[]>([]);
   const [platformData, setPlatformData] = useState<PlatformPerformance[]>([]);
-  const [abTestResults, setAbTestResults] = useState<ABTestResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('30d');
   const [selectedChart, setSelectedChart] = useState<'revenue' | 'roi' | 'performance' | 'conversions' | 'pipeline'>('revenue');
@@ -155,6 +138,7 @@ export default function Analytics() {
   };
 
   const fetchAnalytics = async () => {
+    setLoading(true);
     try {
       // Fetch overview analytics
       const response = await fetch(`/api/analytics/overview?range=${timeRange}`);
@@ -166,14 +150,33 @@ export default function Analytics() {
       const campaignsData = await campaignsResponse.json();
       setCampaigns(campaignsData.campaigns || []);
 
-      // Generate time series data (mock for now)
-      setTimeSeriesData(generateTimeSeriesData(timeRange));
-      
-      // Generate platform performance data
-      setPlatformData(generatePlatformData(campaignsData.campaigns || []));
-      
-      // Generate A/B test results
-      setAbTestResults(generateABTestData());
+      // Fetch time series performance data
+      try {
+        const timeSeriesRes = await fetch(`/api/analytics/performance-over-time?range=${timeRange}`);
+        if (timeSeriesRes.ok) {
+          const tsData = await timeSeriesRes.json();
+          setTimeSeriesData(Array.isArray(tsData) ? tsData : tsData.data || []);
+        } else {
+          setTimeSeriesData([]);
+        }
+      } catch (e) {
+        console.error('Performance over time data unavailable:', e);
+        setTimeSeriesData([]);
+      }
+
+      // Fetch platform performance data
+      try {
+        const platformRes = await fetch(`/api/analytics/platform-performance?range=${timeRange}`);
+        if (platformRes.ok) {
+          const pData = await platformRes.json();
+          setPlatformData(Array.isArray(pData) ? pData : pData.platforms || []);
+        } else {
+          setPlatformData([]);
+        }
+      } catch (e) {
+        console.error('Platform performance data unavailable:', e);
+        setPlatformData([]);
+      }
 
       // Fetch pipeline analytics
       try {
@@ -193,93 +196,6 @@ export default function Analytics() {
     } finally {
       setLoading(false);
     }
-  };
-
-  // Generate mock time series data
-  const generateTimeSeriesData = (range: string): TimeSeriesData[] => {
-    const days = range === '7d' ? 7 : range === '30d' ? 30 : range === '90d' ? 90 : 365;
-    const data: TimeSeriesData[] = [];
-    
-    for (let i = days - 1; i >= 0; i--) {
-      const date = new Date();
-      date.setDate(date.getDate() - i);
-      
-      const baseImpressions = Math.floor(Math.random() * 10000) + 5000;
-      const baseCTR = Math.random() * 3 + 1.5; // 1.5-4.5%
-      const baseConversionRate = Math.random() * 5 + 2; // 2-7%
-      
-      const clicks = Math.floor(baseImpressions * (baseCTR / 100));
-      const conversions = Math.floor(clicks * (baseConversionRate / 100));
-      const spend = Math.floor(clicks * (Math.random() * 2 + 1.5)); // $1.5-3.5 CPC
-      const revenue = Math.floor(conversions * (Math.random() * 50 + 75)); // $75-125 per conversion
-      
-      data.push({
-        date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-        impressions: baseImpressions,
-        clicks,
-        conversions,
-        spend,
-        revenue,
-        roi: spend > 0 ? Math.round(((revenue - spend) / spend) * 100) : 0,
-        ctr: parseFloat(baseCTR.toFixed(2)),
-        conversionRate: parseFloat(baseConversionRate.toFixed(2))
-      });
-    }
-    
-    return data;
-  };
-
-  // Generate platform performance data
-  const generatePlatformData = (campaigns: CampaignPerformance[]): PlatformPerformance[] => {
-    const platforms = ['meta', 'google', 'tiktok', 'linkedin'];
-    const colors = ['#1877F2', '#4285F4', '#FF0050', '#0077B5'];
-    
-    return platforms.map((platform, index) => {
-      const platformCampaigns = campaigns.filter(c => c.platform === platform);
-      const totalSpend = platformCampaigns.reduce((sum, c) => sum + c.spend, 0);
-      const totalRevenue = platformCampaigns.reduce((sum, c) => sum + c.revenue, 0);
-      
-      return {
-        platform: platform.charAt(0).toUpperCase() + platform.slice(1),
-        spend: totalSpend,
-        revenue: totalRevenue,
-        roi: totalSpend > 0 ? Math.round(((totalRevenue - totalSpend) / totalSpend) * 100) : 0,
-        campaigns: platformCampaigns.length,
-        color: colors[index]
-      };
-    });
-  };
-
-  // Generate A/B test data
-  const generateABTestData = (): ABTestResult[] => {
-    const testTypes: Array<'creative' | 'audience' | 'bidding' | 'placement'> = ['creative', 'audience', 'bidding', 'placement'];
-    const campaigns = ['Summer Sale 2024', 'Q4 Holiday Campaign', 'Brand Awareness Push', 'Lead Gen Expansion'];
-    
-    return Array.from({ length: 8 }, (_, i) => {
-      const testType = testTypes[i % testTypes.length];
-      const variant = i % 2 === 0 ? 'A' as const : 'B' as const;
-      const baseConversions = Math.floor(Math.random() * 100) + 50;
-      const impressions = Math.floor(Math.random() * 10000) + 5000;
-      const clicks = Math.floor(impressions * 0.03);
-      const conversionRate = (baseConversions / clicks) * 100;
-      const costPerConversion = Math.random() * 20 + 15;
-      
-      return {
-        id: `test_${i + 1}`,
-        campaignName: campaigns[i % campaigns.length],
-        testType,
-        variant,
-        impressions,
-        clicks,
-        conversions: baseConversions,
-        conversionRate: parseFloat(conversionRate.toFixed(2)),
-        costPerConversion: parseFloat(costPerConversion.toFixed(2)),
-        significance: Math.random() * 40 + 80, // 80-100%
-        status: i < 2 ? 'running' as const : i < 6 ? 'completed' as const : 'planning' as const,
-        winner: i < 6 ? (Math.random() > 0.5 ? 'A' as const : 'B' as const) : undefined,
-        lift: i < 6 ? parseFloat((Math.random() * 30 + 5).toFixed(1)) : undefined
-      };
-    });
   };
 
   if (loading) {
@@ -323,7 +239,6 @@ export default function Analytics() {
       analytics,
       campaigns,
       platformData,
-      abTestResults,
       generatedAt: new Date().toISOString()
     };
     
@@ -554,6 +469,12 @@ export default function Analytics() {
         {selectedChart === 'revenue' && (
           <div className="chart-container">
             <h3>Revenue & Spend Trend</h3>
+            {timeSeriesData.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--text-muted)' }}>
+                <BarChart3 size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+                <p>No performance data available for this time range.</p>
+              </div>
+            ) : (
             <ResponsiveContainer width="100%" height={400}>
               <ComposedChart data={timeSeriesData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -584,12 +505,19 @@ export default function Analytics() {
                 </defs>
               </ComposedChart>
             </ResponsiveContainer>
+            )}
           </div>
         )}
 
         {selectedChart === 'roi' && (
           <div className="chart-container">
             <h3>ROI Performance Analysis</h3>
+            {timeSeriesData.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--text-muted)' }}>
+                <BarChart3 size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+                <p>No performance data available for this time range.</p>
+              </div>
+            ) : (
             <ResponsiveContainer width="100%" height={400}>
               <AreaChart data={timeSeriesData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -612,12 +540,19 @@ export default function Analytics() {
                 </defs>
               </AreaChart>
             </ResponsiveContainer>
+            )}
           </div>
         )}
 
         {selectedChart === 'performance' && (
           <div className="chart-container">
             <h3>Performance Metrics Over Time</h3>
+            {timeSeriesData.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--text-muted)' }}>
+                <BarChart3 size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+                <p>No performance data available for this time range.</p>
+              </div>
+            ) : (
             <ResponsiveContainer width="100%" height={400}>
               <LineChart data={timeSeriesData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -625,28 +560,35 @@ export default function Analytics() {
                 <YAxis stroke="#888" />
                 <Tooltip content={<CustomTooltip />} />
                 <Legend />
-                <Line 
-                  type="monotone" 
-                  dataKey="ctr" 
-                  stroke="#4ecdc4" 
+                <Line
+                  type="monotone"
+                  dataKey="ctr"
+                  stroke="#4ecdc4"
                   strokeWidth={2}
                   name="CTR %"
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="conversionRate" 
-                  stroke="#ff6b6b" 
+                <Line
+                  type="monotone"
+                  dataKey="conversionRate"
+                  stroke="#ff6b6b"
                   strokeWidth={2}
                   name="Conversion Rate %"
                 />
               </LineChart>
             </ResponsiveContainer>
+            )}
           </div>
         )}
 
         {selectedChart === 'conversions' && (
           <div className="chart-container">
             <h3>Conversion Funnel Analysis</h3>
+            {timeSeriesData.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--text-muted)' }}>
+                <BarChart3 size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+                <p>No performance data available for this time range.</p>
+              </div>
+            ) : (
             <ResponsiveContainer width="100%" height={400}>
               <BarChart data={timeSeriesData.slice(-7)}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -674,6 +616,7 @@ export default function Analytics() {
                 />
               </BarChart>
             </ResponsiveContainer>
+            )}
           </div>
         )}
 
@@ -809,6 +752,12 @@ export default function Analytics() {
       {/* Platform Performance */}
       <div className="platform-performance-section">
         <h2>Platform Performance Comparison</h2>
+        {platformData.length === 0 ? (
+          <div className="glass" style={{ textAlign: 'center', padding: '3rem 2rem', color: 'var(--text-muted)' }}>
+            <BarChart3 size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+            <p>No platform performance data available for this time range.</p>
+          </div>
+        ) : (
         <div className="platform-charts">
           <div className="platform-chart glass">
             <h3>Revenue by Platform</h3>
@@ -840,8 +789,8 @@ export default function Analytics() {
                 <XAxis dataKey="platform" stroke="#888" />
                 <YAxis stroke="#888" />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar 
-                  dataKey="roi" 
+                <Bar
+                  dataKey="roi"
                   name="ROI %"
                 >
                   {platformData.map((entry, index) => (
@@ -852,54 +801,16 @@ export default function Analytics() {
             </ResponsiveContainer>
           </div>
         </div>
+        )}
       </div>
 
       {/* A/B Test Results */}
       {showABTests && (
         <div className="ab-test-section">
           <h2>A/B Test Results</h2>
-          <div className="ab-test-grid">
-            {abTestResults.map((test) => (
-              <div key={test.id} className="ab-test-card glass">
-                <div className="test-header">
-                  <div className="test-info">
-                    <h4>{test.campaignName}</h4>
-                    <span className="test-type">{test.testType.toUpperCase()} TEST</span>
-                  </div>
-                  <div className={`test-status status-${test.status}`}>
-                    {test.status.toUpperCase()}
-                  </div>
-                </div>
-                
-                <div className="test-metrics">
-                  <div className="metric">
-                    <span className="metric-label">Variant</span>
-                    <span className="metric-value">{test.variant}</span>
-                  </div>
-                  <div className="metric">
-                    <span className="metric-label">Conversion Rate</span>
-                    <span className="metric-value">{test.conversionRate}%</span>
-                  </div>
-                  <div className="metric">
-                    <span className="metric-label">Cost/Conv</span>
-                    <span className="metric-value">${test.costPerConversion}</span>
-                  </div>
-                  <div className="metric">
-                    <span className="metric-label">Significance</span>
-                    <span className="metric-value">{test.significance}%</span>
-                  </div>
-                </div>
-
-                {test.winner && test.lift && (
-                  <div className="test-result">
-                    <span className={`winner-badge ${test.winner === test.variant ? 'winner' : 'challenger'}`}>
-                      {test.winner === test.variant ? '🏆 WINNER' : '📊 CHALLENGER'}
-                    </span>
-                    <span className="lift-value">+{test.lift}% lift</span>
-                  </div>
-                )}
-              </div>
-            ))}
+          <div className="glass" style={{ textAlign: 'center', padding: '3rem 2rem', color: 'var(--text-muted)' }}>
+            <Target size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+            <p>No A/B tests configured yet. Create an A/B test from the Campaigns page to see results here.</p>
           </div>
         </div>
       )}
