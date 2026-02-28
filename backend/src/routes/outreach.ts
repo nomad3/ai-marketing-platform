@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { query } from '../db.js';
 import { generateOutreach } from '../services/outreach-generator.js';
+import { emitWebhook } from '../services/webhook-emitter.js';
 
 const router = Router();
 
@@ -125,16 +126,25 @@ router.put('/:id/status', async (req, res) => {
       return res.status(404).json({ error: 'Draft not found' });
     }
 
+    const draft = result.rows[0];
+
     // Log activity if sent
     if (status === 'sent') {
-      const draft = result.rows[0];
       await query(`
         INSERT INTO prospect_activities (prospect_id, user_id, activity_type, title, metadata)
         VALUES ($1, $2, 'email_sent', $3, $4)
       `, [draft.prospect_id, userId, `${draft.outreach_type} marked as sent`, JSON.stringify({ draft_id: draft.id, outreach_type: draft.outreach_type })]);
     }
 
-    res.json({ draft: result.rows[0] });
+    // Fire-and-forget webhook notification
+    emitWebhook('outreach.status_changed', {
+      outreach_id: id,
+      prospect_id: draft.prospect_id,
+      outreach_type: draft.outreach_type,
+      new_status: status,
+    });
+
+    res.json({ draft });
   } catch (error) {
     console.error('Error updating draft status:', error);
     res.status(500).json({ error: 'Failed to update draft status' });
