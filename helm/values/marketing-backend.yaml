@@ -89,6 +89,8 @@ configMap:
     PORT: "3000"
     DATABASE_URL: "postgresql://postgres:postgres@marketing-db:5432/marketing_platform"
     JWT_SECRET: "mktg-platform-jwt-s3cret-k3y-2026-prod"
+    SERVICETSUNAMI_WEBHOOK_URL: "http://servicetsunami-api:8000/api/v1/webhooks/hca"
+    SERVICE_API_KEY: "hca-st-integration-key-2026-prod"
 
 # No tmp volumes needed
 tmpVolumes:
