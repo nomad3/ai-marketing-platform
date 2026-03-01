@@ -1,9 +1,16 @@
 import OpenAI from 'openai';
 import { query } from '../db.js';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let _openai: OpenAI | null = null;
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY not configured — research is handled by ServiceTsunami agents');
+    }
+    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  return _openai;
+}
 
 interface ResearchBrief {
   executive_summary: string;
@@ -49,7 +56,7 @@ export async function generateResearchBrief(prospectId: number): Promise<Researc
 
   const prompt = buildResearchPrompt(prospect, signalsResult.rows);
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [
       {

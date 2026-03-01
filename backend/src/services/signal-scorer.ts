@@ -1,9 +1,16 @@
 import OpenAI from 'openai';
 import { query } from '../db.js';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let _openai: OpenAI | null = null;
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY not configured — scoring is handled by ServiceTsunami agents');
+    }
+    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  return _openai;
+}
 
 // Signal category weights for score calculation
 const CATEGORY_WEIGHTS: Record<string, number> = {
@@ -50,7 +57,7 @@ export async function scoreProspect(prospectId: number): Promise<ScoringResult> 
 
   const prompt = buildScoringPrompt(prospect, existingSignals.rows);
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [
       {

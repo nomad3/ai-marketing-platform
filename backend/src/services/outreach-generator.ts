@@ -1,9 +1,16 @@
 import OpenAI from 'openai';
 import { query } from '../db.js';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let _openai: OpenAI | null = null;
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY not configured — outreach is handled by ServiceTsunami agents');
+    }
+    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  return _openai;
+}
 
 type OutreachType = 'cold_email' | 'follow_up' | 'linkedin_message' | 'intro_one_pager';
 
@@ -36,7 +43,7 @@ export async function generateOutreach(
 
   const prompt = buildOutreachPrompt(prospect, signalsResult.rows, outreachType, customInstructions);
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [
       {

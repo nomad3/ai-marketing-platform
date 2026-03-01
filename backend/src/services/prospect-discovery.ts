@@ -2,9 +2,16 @@ import OpenAI from 'openai';
 import { query } from '../db.js';
 import { scoreProspect } from './signal-scorer.js';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let _openai: OpenAI | null = null;
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY not configured — discovery is handled by ServiceTsunami agents');
+    }
+    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  return _openai;
+}
 
 interface DiscoveryCriteria {
   industry: string;
@@ -43,7 +50,7 @@ export async function discoverProspects(criteria: DiscoveryCriteria): Promise<Di
   const maxResults = Math.min(criteria.max_results || 10, 20);
   const prompt = buildDiscoveryPrompt(criteria, maxResults);
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: 'gpt-4o',
     messages: [
       {
