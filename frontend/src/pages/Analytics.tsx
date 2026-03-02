@@ -110,7 +110,7 @@ interface PlatformPerformance {
 
 export default function Analytics() {
   const navigate = useNavigate();
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, loading: authLoading } = useAuth();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [campaigns, setCampaigns] = useState<CampaignPerformance[]>([]);
   const [timeSeriesData, setTimeSeriesData] = useState<TimeSeriesData[]>([]);
@@ -124,13 +124,13 @@ export default function Analytics() {
   const [signalData, setSignalData] = useState<any>(null);
 
   useEffect(() => {
-    // Redirect to login if not authenticated
+    if (authLoading) return;
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
     fetchAnalytics();
-  }, [timeRange, isAuthenticated, navigate]);
+  }, [authLoading, timeRange, isAuthenticated, navigate]);
 
   const handleLogout = async () => {
     await logout();

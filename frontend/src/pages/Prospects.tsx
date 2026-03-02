@@ -38,7 +38,7 @@ interface Prospect {
 
 export default function Prospects() {
   const navigate = useNavigate();
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, loading: authLoading } = useAuth();
   const [prospects, setProspects] = useState<Prospect[]>([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
@@ -61,9 +61,10 @@ export default function Prospects() {
   });
 
   useEffect(() => {
+    if (authLoading) return;
     if (!isAuthenticated) { navigate('/login'); return; }
     fetchProspects();
-  }, [isAuthenticated, navigate, stageFilter, industryFilter, searchQuery, sortBy, sortOrder]);
+  }, [authLoading, isAuthenticated, navigate, stageFilter, industryFilter, searchQuery, sortBy, sortOrder]);
 
   const fetchProspects = async () => {
     try {

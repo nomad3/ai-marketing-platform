@@ -12,9 +12,11 @@ import './Dashboard.css'; // Reuse dashboard styles for consistency
 
 export default function Content() {
   const navigate = useNavigate();
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, loading: authLoading } = useAuth();
 
-  // Redirect to login if not authenticated
+  if (authLoading) {
+    return <div className="dashboard-loading"><div className="loading-spinner" /></div>;
+  }
   if (!isAuthenticated) {
     navigate('/login');
     return null;

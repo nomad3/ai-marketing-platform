@@ -38,7 +38,7 @@ interface Campaign {
 
 export default function Campaigns() {
   const navigate = useNavigate();
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, loading: authLoading } = useAuth();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
@@ -48,13 +48,13 @@ export default function Campaigns() {
   const [showCampaignCreator, setShowCampaignCreator] = useState(false);
 
   useEffect(() => {
-    // Redirect to login if not authenticated
+    if (authLoading) return;
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
     fetchCampaigns();
-  }, [isAuthenticated, navigate]);
+  }, [authLoading, isAuthenticated, navigate]);
 
   const handleLogout = async () => {
     await logout();

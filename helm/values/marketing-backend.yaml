@@ -9,10 +9,11 @@ image:
   pullPolicy: Always
   tag: "latest"
 
-# Service account
+# Service account with Workload Identity for Cloud SQL
 serviceAccount:
   create: true
-  annotations: {}
+  annotations:
+    iam.gke.io/gcp-service-account: dev-backend-app@ai-agency-479516.iam.gserviceaccount.com
   name: "marketing-backend-sa"
 
 # Replica count and autoscaling
@@ -87,10 +88,39 @@ configMap:
   data:
     NODE_ENV: "production"
     PORT: "3000"
-    DATABASE_URL: "postgresql://postgres:postgres@marketing-db:5432/marketing_platform"
+    DATABASE_HOST: "localhost"
+    DATABASE_PORT: "5432"
+    DATABASE_NAME: "hca-deal-intelligence"
     JWT_SECRET: "mktg-platform-jwt-s3cret-k3y-2026-prod"
     SERVICETSUNAMI_WEBHOOK_URL: "http://servicetsunami-api:8000/api/v1/webhooks/hca"
     SERVICE_API_KEY: "hca-st-integration-key-2026-prod"
+
+# Secret references - pulls DATABASE_URL from k8s secret
+secretRefs:
+  - name: marketing-backend-secrets
+    keys:
+      - DATABASE_URL
+
+# Cloud SQL Proxy sidecar for secure database connection
+extraContainers:
+  - name: cloud-sql-proxy
+    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0
+    args:
+      - "--private-ip"
+      - "--structured-logs"
+      - "--port=5432"
+      - "--http-port=9090"
+      - "ai-agency-479516:us-central1:dev-postgres-instance"
+    securityContext:
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
 
 # No tmp volumes needed
 tmpVolumes:

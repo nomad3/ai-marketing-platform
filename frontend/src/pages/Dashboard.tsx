@@ -44,7 +44,7 @@ interface AnalyticsOverview {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, loading: authLoading } = useAuth();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null);
   const [loading, setLoading] = useState(true);
@@ -54,13 +54,13 @@ export default function Dashboard() {
   const [pipelineStats, setPipelineStats] = useState<any>(null);
 
   useEffect(() => {
-    // Redirect to login if not authenticated
+    if (authLoading) return;
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
     fetchDashboardData();
-  }, [isAuthenticated, navigate]);
+  }, [authLoading, isAuthenticated, navigate]);
 
   const handleLogout = async () => {
     await logout();

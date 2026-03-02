@@ -89,7 +89,7 @@ interface Prospect {
 export default function ProspectDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, loading: authLoading } = useAuth();
 
   const [prospect, setProspect] = useState<Prospect | null>(null);
   const [signals, setSignals] = useState<Signal[]>([]);
@@ -104,9 +104,10 @@ export default function ProspectDetail() {
   const [outreachType, setOutreachType] = useState<string>('cold_email');
 
   useEffect(() => {
+    if (authLoading) return;
     if (!isAuthenticated) { navigate('/login'); return; }
     fetchProspectDetail();
-  }, [id, isAuthenticated, navigate]);
+  }, [authLoading, id, isAuthenticated, navigate]);
 
   const fetchProspectDetail = async () => {
     try {
